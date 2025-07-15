@@ -1,0 +1,144 @@
+document.addEventListener('DOMContentLoaded', () => {
+  initHeaderScroll()
+  initSideMenu()
+  initSidebarMobile()
+  initLoadMorePosts()
+  initImagePreviews()
+})
+
+/* ---------- Header BG ---------- */
+function initHeaderScroll() {
+  const header = document.querySelector('.header')
+
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('header-bg', window.scrollY > 0)
+  })
+}
+
+
+/* ---------- SIDE MENU ---------- */
+function initSideMenu() {
+  const menuBtn = document.querySelector('.header .menu-btn'),
+    menuOverlay = document.querySelector('.side-menu-overlay'),
+    sideMenu = document.querySelector('.side-menu'),
+    closeMenuBtn = document.querySelector('.close-btn');
+
+  const openMenu = () => {
+    sideMenu.classList.add('open');
+    menuOverlay.classList.add('visible');
+    document.body.style.overflow = "hidden";
+  }
+
+  const closeMenu = () => {
+    sideMenu.classList.remove("open")
+    menuOverlay.classList.remove("visible")
+    document.body.style.removeProperty("overflow")
+  }
+
+  menuBtn.addEventListener('click', openMenu)
+  closeMenuBtn.addEventListener('click', closeMenu)
+  menuOverlay.addEventListener('click', closeMenu)
+}
+
+
+/* ---------- SHOW & HIDE SIDEBAR FOR MOBILES ---------- */
+function initSidebarMobile() {
+  const sidebar = document.querySelector('aside');
+  const showSidebarBtn = document.querySelector('#show__sidebar-btn');
+  const hideSidebarBtn = document.querySelector('#hide__sidebar-btn');
+
+  const showSidebar = () => {
+    sidebar.style.left = '0';
+    showSidebarBtn.style.display = 'none';
+    hideSidebarBtn.style.display = 'inline-block';
+  }
+
+  const hideSidebar = () => {
+    sidebar.style.left = '-100%';
+    showSidebarBtn.style.display = 'inline-block';
+    hideSidebarBtn.style.display = 'none';
+  }
+
+  showSidebarBtn?.addEventListener('click', showSidebar)
+  hideSidebarBtn?.addEventListener('click', hideSidebar)
+}
+
+
+/* ---------- LOAD MORE POSTS ---------- */
+function initLoadMorePosts() {
+  const loadMoreBtn = document.getElementById("load-more");
+  const postsContainer = document.querySelector(".posts__container");
+
+  if (!loadMoreBtn || !postsContainer) return;
+
+  loadMoreBtn.addEventListener("click", async () => {
+    const offset = parseInt(loadMoreBtn.dataset.offset || "0", 10);
+    const token = loadMoreBtn.dataset.token || "";
+
+    try {
+      const response = await fetch("/load-more-posts.html", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `offset=${offset}&load_more_posts_token=${encodeURIComponent(token)}`
+      });
+
+      if (response.status === 204) {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.innerText = "Plus d’articles disponibles";
+        return;
+      }
+
+      const data = await response.text();
+
+      if (data.trim() !== "") {
+        postsContainer.insertAdjacentHTML("beforeend", data);
+        // Met à jour data-offset (en tant que string)
+        loadMoreBtn.dataset.offset = String(offset + 9);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement des articles :", error);
+    }
+  });
+}
+
+
+/* ---------- IMAGE PREVIEW ---------- */
+function initImagePreviews() {
+  const imagePairs = [
+    ['avatar', 'preview-avatar'],
+    ['thumbnail', 'preview-thumbnail'],
+    ['image_1', 'preview-image_1'],
+    ['image_2', 'preview-image_2'],
+    ['flag', 'preview-flag'],
+  ];
+
+  imagePairs.forEach(([inputId, previewId]) => {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+
+    if (input && preview) {
+      input.addEventListener('change', () => {
+        const file = input.files[0];
+        if (file) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = 'block';
+        }
+      });
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

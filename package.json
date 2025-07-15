@@ -1,0 +1,16 @@
+{
+  "name": "lisandaur-tour",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "browser-sync start --proxy \"lisandaur-tour.test\" --files \"**/*.php\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
+  }
+}
