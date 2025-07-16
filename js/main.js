@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebarMobile()
   initLoadMorePosts()
   initImagePreviews()
+  initAlertMessage()
 })
 
 /* ---------- Header BG ---------- */
@@ -22,6 +23,9 @@ function initSideMenu() {
     menuOverlay = document.querySelector('.side-menu-overlay'),
     sideMenu = document.querySelector('.side-menu'),
     closeMenuBtn = document.querySelector('.close-btn');
+
+  // Si les éléments requis ne sont pas là (page signin), on quitte la fonction
+  if (!menuBtn || !menuOverlay || !sideMenu || !closeMenuBtn) return;
 
   const openMenu = () => {
     sideMenu.classList.add('open');
@@ -47,6 +51,8 @@ function initSidebarMobile() {
   const showSidebarBtn = document.querySelector('#show__sidebar-btn');
   const hideSidebarBtn = document.querySelector('#hide__sidebar-btn');
 
+  if (!sidebar || !showSidebarBtn || !hideSidebarBtn) return;
+
   const showSidebar = () => {
     sidebar.style.left = '0';
     showSidebarBtn.style.display = 'none';
@@ -61,6 +67,16 @@ function initSidebarMobile() {
 
   showSidebarBtn?.addEventListener('click', showSidebar)
   hideSidebarBtn?.addEventListener('click', hideSidebar)
+}
+
+/* ---------- SHOW & HIDE ALERT MESSAGE SUCCESS ---------- */
+function initAlertMessage() {
+  const successMessages = document.querySelectorAll('.alert__message.success');
+  successMessages.forEach((message) => {
+    setTimeout(() => {
+      message.classList.add('hide')
+    }, 3000)
+  })
 }
 
 

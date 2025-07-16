@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/config/init.php';
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,29 +11,34 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!--  CUSTOM CSS  -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="<?= ROOT_URL ?>css/style.css">
   <!-- ICONSCOUT  -->
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-  <title>LSA-Tour</title>
+  <title>Se connecter | LSA-Tour</title>
 </head>
 <body>
 
 <section class="form__section">
   <div class="container form__section-container">
     <div class="logo">
-      <a href="index.php">
+      <a href="<?= ROOT_URL ?>">
         <span>LSA</span>
-        <img src="images/plane.svg" alt="">
+        <img src="<?= ROOT_URL ?>images/plane.svg" alt="">
         <span>TOUR</span>
       </a>
     </div>
 
     <h2>Se connecter ici</h2>
 
-    <div class="alert__message success">
-      <p>Ici un message de succès sera affiché</p>
-    </div>
-
+    <?php if(isset($_SESSION['signup-success'])): ?>
+      <div class="alert__message success">
+        <p>
+          <?= $_SESSION['signup-success'];
+          unset($_SESSION['signup-success']);
+          ?>
+        </p>
+      </div>
+    <?php endif; ?>
     <form action="#" enctype="multipart/form-data">
       <input type="email" placeholder="Votre email ou pseudo">
       <input type="password" placeholder="Votre mot de passe">
@@ -40,5 +49,13 @@
   </div>
 </section>
 
+<script>
+  const successMessage = document.querySelector('.alert__message.success');
+  if (successMessage) {
+    setTimeout(() => {
+      successMessage.classList.add('hide');
+    }, 3000);
+  }
+</script>
 </body>
 </html>

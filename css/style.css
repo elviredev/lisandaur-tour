@@ -719,7 +719,8 @@ form {
 }
 
 .form__section-add-user .form__control input[type="file"],
-.form__section-add-country .form__control input[type="file"] {
+.form__section-add-country .form__control input[type="file"],
+.form__section-signup .form__control input[type="file"] {
   font-size: inherit;
   padding: .5rem .75rem;
   width: 100%;
@@ -809,6 +810,18 @@ select {
   padding: .8rem 1.4rem;
   border-radius: .25rem;
   margin-bottom: 1rem;
+  font-size: var(--fs-sm);
+  transition: opacity 0.5s ease, visibility 0.5s ease, margin 0.5s ease, height 0.5s ease;
+}
+
+.alert__message.hide {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .alert__message.error {
