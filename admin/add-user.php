@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../config/init.php';
+require_once __DIR__ . '/../utils/admin-only.php';
+
 $page_title = "Ajouter un utilisateur";
 include 'partials/header.php'
 ?>

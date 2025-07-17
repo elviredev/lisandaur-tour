@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../config/init.php';
+require_once __DIR__ . '/../utils/admin-only.php';
+
 $page_title = "Gérer les utilisateurs";
 include 'partials/header.php'
 ?>
@@ -28,30 +31,33 @@ include 'partials/header.php'
             <h5>Gérer les articles</h5>
           </a>
         </li>
-        <li>
-          <a href="add-user.php">
-            <i class="uil uil-user-plus"></i>
-            <h5>Ajouter un utilisateur</h5>
-          </a>
-        </li>
-        <li>
-          <a href="manage-users.php" class="active">
-            <i class="uil uil-users-alt"></i>
-            <h5>Gérer les utilisateurs</h5>
-          </a>
-        </li>
-        <li>
-          <a href="add-country.php">
-            <i class="uil uil-edit"></i>
-            <h5>Ajouter un pays</h5>
-          </a>
-        </li>
-        <li>
-          <a href="manage-countries.php">
-            <i class="uil uil-list-ul"></i>
-            <h5>Gérer les  pays</h5>
-          </a>
-        </li>
+        <!-- If user is admin -->
+        <?php if(isset($_SESSION['user_is_admin'])): ?>
+          <li>
+            <a href="add-user.php">
+              <i class="uil uil-user-plus"></i>
+              <h5>Ajouter un utilisateur</h5>
+            </a>
+          </li>
+          <li>
+            <a href="manage-users.php" class="active">
+              <i class="uil uil-users-alt"></i>
+              <h5>Gérer les utilisateurs</h5>
+            </a>
+          </li>
+          <li>
+            <a href="add-country.php">
+              <i class="uil uil-edit"></i>
+              <h5>Ajouter un pays</h5>
+            </a>
+          </li>
+          <li>
+            <a href="manage-countries.php">
+              <i class="uil uil-list-ul"></i>
+              <h5>Gérer les  pays</h5>
+            </a>
+          </li>
+        <?php endif; ?>
       </ul>
     </aside>
 

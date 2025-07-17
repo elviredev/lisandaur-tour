@@ -1,6 +1,15 @@
 <?php
 require_once __DIR__ . "/../config/init.php";
 
+// fetch current user from bdd
+if (isset($_SESSION['user-id'])) {
+  $id = filter_var($_SESSION['user-id'], FILTER_SANITIZE_NUMBER_INT);
+  $query = $connection->prepare("SELECT avatar FROM users WHERE id = '$id'");
+  $query->execute();
+  $result = $query->get_result();
+  $avatar = $result->fetch_assoc();
+  $query->close();
+}
 ?>
 
 <!doctype html>
@@ -33,9 +42,11 @@ require_once __DIR__ . "/../config/init.php";
       </a>
     </div>
     <div class="img__profile-menu">
-      <div class="avatar">
-        <img src="images/01.png" alt="avatar">
-      </div>
+      <?php if (isset($_SESSION['user-id'])): ?>
+        <div class="avatar">
+          <img src="<?= ROOT_URL . 'images/avatars/' . $avatar['avatar'] ?>" alt="avatar">
+        </div>
+      <?php endif; ?>
       <button class="menu-btn">
         <span></span>
         <span></span>
@@ -60,14 +71,18 @@ require_once __DIR__ . "/../config/init.php";
       <li><a href="<?= ROOT_URL ?>blog.php">Blog</a></li>
       <li><a href="<?= ROOT_URL ?>about.php">À propos</a></li>
       <li><a href="<?= ROOT_URL ?>contact.php">Contact</a></li>
-      <li><a href="<?= ROOT_URL ?>admin/index.php">Dashboard</a></li>
-      <li><a href="<?= ROOT_URL ?>logout.php">Déconnexion</a></li>
-<!--      <li><a href="--><?php //= ROOT_URL ?><!--signin.php" class="signin">Se connecter</a></li>-->
-      <li class="img__profile">
-        <div class="avatar">
-          <img src="images/01.png" alt="avatar">
-        </div>
-      </li>
+      <!-- If user is logged in -->
+      <?php if (isset($_SESSION['user-id'])): ?>
+        <li><a href="<?= ROOT_URL ?>admin/index.php">Dashboard</a></li>
+        <li><a href="<?= ROOT_URL ?>logout.php">Se déconnecter</a></li>
+        <li class="img__profile">
+          <div class="avatar">
+            <img src="<?= ROOT_URL . 'images/avatars/' . $avatar['avatar'] ?>" alt="avatar">
+          </div>
+        </li>
+      <?php else: ?>
+        <li><a href="<?= ROOT_URL ?>signin.php" class="signin">Se connecter</a></li>
+      <?php endif; ?>
     </ul>
   </nav>
 </div>

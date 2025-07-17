@@ -1,10 +1,22 @@
 <?php
+require_once __DIR__ . '/../config/init.php';
+
 $page_title = "Gérer les articles";
 include 'partials/header.php'
 ?>
 
 <!-- SECTION DASHBOARD START -->
 <section class="dashboard">
+  <?php if (isset($_SESSION['access-denied'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['access-denied'];
+        unset($_SESSION['access-denied']);
+        ?>
+      </p>
+    </div>
+  <?php endif; ?>
+
   <div class="container dashboard__container">
     <!-- BUTTON FOR MOBILES -->
     <button id="show__sidebar-btn" class="sidebar__toggle">
@@ -28,30 +40,33 @@ include 'partials/header.php'
             <h5>Gérer les articles</h5>
           </a>
         </li>
-        <li>
-          <a href="add-user.php">
-            <i class="uil uil-user-plus"></i>
-            <h5>Ajouter un utilisateur</h5>
-          </a>
-        </li>
-        <li>
-          <a href="manage-users.php">
-            <i class="uil uil-users-alt"></i>
-            <h5>Gérer les utilisateurs</h5>
-          </a>
-        </li>
-        <li>
-          <a href="add-country.php">
-            <i class="uil uil-edit"></i>
-            <h5>Ajouter un pays</h5>
-          </a>
-        </li>
-        <li>
-          <a href="manage-countries.php">
-            <i class="uil uil-list-ul"></i>
-            <h5>Gérer les pays</h5>
-          </a>
-        </li>
+        <!-- If user is admin -->
+        <?php if(isset($_SESSION['user_is_admin'])): ?>
+          <li>
+            <a href="add-user.php">
+              <i class="uil uil-user-plus"></i>
+              <h5>Ajouter un utilisateur</h5>
+            </a>
+          </li>
+          <li>
+            <a href="manage-users.php">
+              <i class="uil uil-users-alt"></i>
+              <h5>Gérer les utilisateurs</h5>
+            </a>
+          </li>
+          <li>
+            <a href="add-country.php">
+              <i class="uil uil-edit"></i>
+              <h5>Ajouter un pays</h5>
+            </a>
+          </li>
+          <li>
+            <a href="manage-countries.php">
+              <i class="uil uil-list-ul"></i>
+              <h5>Gérer les pays</h5>
+            </a>
+          </li>
+        <?php endif; ?>
       </ul>
     </aside>
 

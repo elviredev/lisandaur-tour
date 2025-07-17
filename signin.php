@@ -1,5 +1,9 @@
 <?php
 require_once __DIR__ . '/config/init.php';
+
+// récupérer les données du form en cas d'erreur d'enregistrement
+$username_email = $_SESSION['signin-data']['username_email'] ?? '';
+unset($_SESSION['signin-data']);
 ?>
 
 <!doctype html>
@@ -38,12 +42,21 @@ require_once __DIR__ . '/config/init.php';
           ?>
         </p>
       </div>
+    <?php elseif(isset($_SESSION['signin'])): ?>
+      <div class="alert__message error">
+        <p>
+          <?= $_SESSION['signin'];
+          unset($_SESSION['signin']);
+          ?>
+        </p>
+      </div>
     <?php endif; ?>
-    <form action="#" enctype="multipart/form-data">
-      <input type="email" placeholder="Votre email ou pseudo">
-      <input type="password" placeholder="Votre mot de passe">
 
-      <button type="submit" class="btn-form">Se connecter</button>
+    <form action="<?= ROOT_URL ?>signin-logic.php" method="POST">
+      <input type="text" name="username_email" value="<?= htmlspecialchars($username_email) ?>" placeholder="Votre email ou pseudo">
+      <input type="password" name="password" placeholder="Votre mot de passe">
+
+      <button type="submit" name="submit" class="btn-form">Se connecter</button>
       <small>Vous n'avez pas encore de compte? <a href="signup.php">S'inscrire</a></small>
     </form>
   </div>
