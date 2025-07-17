@@ -73,9 +73,7 @@ if (isset($_POST["submit"])) {
       "firstname" => $firstname,
       "lastname" => $lastname,
       "username" => $username,
-      "email" => $email,
-      "create_password" => $create_password,
-      "confirm_password" => $confirm_password,
+      "email" => $email
     ];
   }
 

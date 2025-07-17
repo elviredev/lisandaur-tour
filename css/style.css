@@ -137,6 +137,9 @@ img {
 .mt-1 {
   margin-top: 1rem;
 }
+.mt-2 {
+  margin-top: 2rem;
+}
 
 ::-webkit-scrollbar {
   width: 9px;
@@ -212,6 +215,8 @@ img {
 }
 
 .btn-form {
+  display: inline-block;
+  width: fit-content;
   padding: .5rem 1.2rem;
   background-color: var(--nebula-600);
   border: none;
@@ -229,8 +234,17 @@ img {
   color: var(--nebula-900);
 }
 
+.btn-pagination {
+  background-color: var(--nebula-700);
+  border-radius: .5rem;
+  transition: var(--transition);
+}
+.btn-pagination:hover {
+  background-color: var(--grey-300);
+  color: black;
+}
 
-.btn.sm {
+.btn.sm, .btn-pagination.sm {
   padding: .3rem .7rem;
   font-size: .8rem;
 }
@@ -473,7 +487,7 @@ img {
   color: var(--pink);
 }
 
-/* ======================= country BUTTON ======================= */
+/* ======================= COUNTRY BUTTON ======================= */
 .country {
   display: inline-flex;
   align-items: center;
@@ -596,7 +610,7 @@ img {
   margin-bottom: 5rem;
 }
 
-/* ======================= country BUTTONS ======================= */
+/* ======================= COUNTRY BUTTONS ======================= */
 .country__buttons {
   padding: 4rem 0;
   border-top: 2px solid var(--grey-800);
@@ -664,6 +678,17 @@ img {
 .search__bar-container i {
   font-size: var(--fs-lg);
   color: var(--pink);
+}
+
+/* ======================= PAGINATION ======================= */
+.pagination {
+  margin-top: 1rem;
+  gap: .5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.pagination .active {
+  background-color: var(--grey-600);
 }
 
 /* ======================= GENERAL FORMS ======================= */

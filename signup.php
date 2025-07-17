@@ -6,8 +6,7 @@ $firstname = $_SESSION['signup-data']['firstname'] ?? '';
 $lastname = $_SESSION['signup-data']['lastname'] ?? '';
 $username = $_SESSION['signup-data']['username'] ?? '';
 $email = $_SESSION['signup-data']['email'] ?? '';
-$create_password = $_SESSION['signup-data']['create_password'] ?? '';
-$confirm_password = $_SESSION['signup-data']['confirm_password'] ?? '';
+
 // delete signup data session
 unset($_SESSION['signup-data']);
 ?>

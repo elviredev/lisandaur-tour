@@ -1,13 +1,48 @@
 <?php
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
+require_once __DIR__.'/../utils/token.php';
 
 $page_title = "Gérer les utilisateurs";
-include 'partials/header.php'
+include 'partials/header.php';
+include 'partials/pagination.php';
+
+// Génération d'un token CSRF
+$csrf_token = generateCSRFToken('csrf_token_delete_user');
+
+/**
+ * Récupérer les users depuis la bdd mais pas le user courant
+ * Requête paginée pour récupérer les users
+ */
+$current_admin_id = $_SESSION['user-id'];
+
+$baseQuery = "SELECT * FROM users WHERE NOT id = $current_admin_id ORDER BY lastname";
+$pagination = paginate($baseQuery, $connection);
+$users = $pagination['items'];
+$page = $pagination['page'];
+$total_pages = $pagination['total_pages'];
 ?>
 
 <!-- SECTION DASHBOARD START -->
 <section class="dashboard">
+  <?php if (isset($_SESSION['add-user-success'])): ?>
+    <div class="alert__message success container">
+      <p>
+        <?= $_SESSION['add-user-success'];
+        unset($_SESSION['add-user-success']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['add-user'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['add-user'];
+        unset($_SESSION['add-user']);
+        ?>
+      </p>
+    </div>
+  <?php endif; ?>
+
   <div class="container dashboard__container">
     <!-- BUTTON FOR MOBILES -->
     <button id="show__sidebar-btn" class="sidebar__toggle">
@@ -65,7 +100,8 @@ include 'partials/header.php'
     <main>
       <h2>Gérer les utilisateurs</h2>
       <!-- FORMAT DESKTOP -->
-      <table>
+      <?php if (count($users) > 0): ?>
+        <table>
         <thead>
         <tr>
           <th>Nom</th>
@@ -76,65 +112,40 @@ include 'partials/header.php'
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>Lilas Castro</td>
-          <td>lilas</td>
-          <td><a href="edit-user.php" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
-          <td>Non</td>
-        </tr>
-        <tr>
-          <td>Sandrine Rodriguez</td>
-          <td>elviredev</td>
-          <td><a href="edit-user.php" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
-          <td>Oui</td>
-        </tr>
-        <tr>
-          <td>Aurélie Lalart</td>
-          <td>aurelie</td>
-          <td><a href="edit-user.php" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
-          <td>Non</td>
-        </tr>
+        <?php foreach ($users as $user): ?>
+          <tr>
+            <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
+            <td><?= $user['username'] ?></td>
+            <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
+            <td><a href="#" class="btn sm danger">Suppr</a></td>
+            <td><?= $user['is_admin'] ? "Oui" : "Non" ?></td>
+          </tr>
+        <?php endforeach; ?>
         </tbody>
       </table>
+
       <!-- FORMAT MOBILE -->
-      <div class="card-mobile__container">
-        <div class="card-mobile">
-          <p>
-            <strong>Nom :</strong> Lilas Castro
-          </p>
-          <p><strong>Pseudo :</strong> lilas</p>
-          <p><strong>Admin :</strong> Non</p>
-          <div class="card-actions">
-            <a href="edit-user.php" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
+        <div class="card-mobile__container">
+          <?php foreach ($users as $user): ?>
+            <div class="card-mobile">
+            <p>
+              <strong>Nom :</strong> <?= "{$user['firstname']} {$user['lastname']}" ?>
+            </p>
+            <p><strong>Pseudo :</strong> <?= $user['username'] ?></p>
+            <p><strong>Admin :</strong> <?= $user['is_admin'] ? "Oui" : "Non" ?></p>
+            <div class="card-actions">
+              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit">Editer</a>
+              <a href="#" class="btn sm danger">Suppr</a>
+            </div>
           </div>
+          <?php endforeach; ?>
         </div>
-        <div class="card-mobile">
-          <p>
-            <strong>Nom :</strong> Sandrine Rodriguez
-          </p>
-          <p><strong>Pseudo :</strong> elviredev</p>
-          <p><strong>Admin :</strong> Oui</p>
-          <div class="card-actions">
-            <a href="edit-user.php" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
-          </div>
-        </div>
-        <div class="card-mobile">
-          <p>
-            <strong>Nom :</strong> Aurélie Lalart
-          </p>
-          <p><strong>Pseudo :</strong> aurelie</p>
-          <p><strong>Admin :</strong> Non</p>
-          <div class="card-actions">
-            <a href="edit-user.php" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
-          </div>
-        </div>
-      </div>
+      <?php else: ?>
+        <div class="alert__message error">Aucun utilisateur trouvé</div>
+      <?php endif; ?>
+
+      <!-- Pagination -->
+      <?php include 'partials/pagination-template.php'; ?>
     </main>
   </div>
 </section>
