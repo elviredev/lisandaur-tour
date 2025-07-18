@@ -1,9 +1,44 @@
 <?php
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
+require_once __DIR__.'/../utils/token.php';
+require_once __DIR__.'/../utils/redirect-msg.php';
 
 $page_title = "Modifier un utilisateur";
-include 'partials/header.php'
+include 'partials/header.php';
+
+// Génération d'un token CSRF
+$csrf_token = generateCSRFToken('csrf_token_edit_user');
+
+// récupérer ID depuis l'URL
+if (isset($_GET['id'])) {
+  $id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+
+  if (!$id) {
+    // si ID invalide (ex. abc, -1, etc)
+    redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', 'ID utilisateur invalide 🤔');
+  }
+
+  // récupérer user depuis bdd
+  $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
+  $stmt->bind_param('i', $id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows === 1) {
+    $user = $result->fetch_assoc();
+  } else {
+    // si ID est bien un entier mais inexistant
+    redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', 'Utilisateur non trouvé 🤔');
+  }
+
+  $stmt->close();
+
+} else {
+  // si ID non fournit dans l'URL
+  redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', 'ID utilisateur non fournit 🤔');
+}
+
 ?>
 
 
@@ -12,26 +47,37 @@ include 'partials/header.php'
   <div class="container form__section-container dashboard__form-container">
     <h2>Modifier un utilisateur</h2>
 
-    <div class="alert__message error">
-      <p>Ici un message d'erreurs sera affiché</p>
-    </div>
+    <?php if (isset($_SESSION['edit-user'])): ?>
+      <div class="alert__message error">
+        <p>
+          <?= $_SESSION['edit-user'];
+          unset($_SESSION['edit-user']);
+          ?>
+        </p>
+      </div>
+    <?php endif; ?>
 
-    <form action="" enctype="multipart/form-data">
+    <form action="<?= ROOT_URL ?>admin/edit-user-logic.php" enctype="multipart/form-data" method="POST">
+      <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+      <input type="hidden" name="csrf_token_edit_user" value="<?= $csrf_token ?>">
+      <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
 
-      <input type="text" name="firstname" placeholder="Prénom">
-      <input type="text" name="lastname" placeholder="Nom">
+      <input type="text" name="firstname" value="<?= $user['firstname'] ?>" placeholder="Prénom">
+      <input type="text" name="lastname" value="<?= $user['lastname'] ?>" placeholder="Nom">
 
       <div class="form__control">
         <label for="role">Rôle Utilisateur</label>
         <select id="role" name="user_role">
-          <option value="1">Auteur</option>
-          <option value="1">Admin</option>
+          <option value="0" <?= $user['is_admin'] == 0 ? 'selected' : '' ?>>Auteur</option>
+          <option value="1" <?= $user['is_admin'] == 1 ? 'selected' : '' ?>>Admin</option>
         </select>
       </div>
 
       <div class="form__control">
         <label for="avatar">Avatar Utilisateur</label>
-        <img src="#" alt="preview avatar" class="previsualisation__img" id="preview-avatar" style="display: none;">
+        <?php if ($user['avatar']): ?>
+          <img src="<?= ROOT_URL . 'images/avatars/' . $user['avatar']  ?>" alt="preview avatar" class="previsualisation__img" id="preview-avatar">
+        <?php endif; ?>
         <input type="file" name="avatar" id="avatar">
       </div>
 

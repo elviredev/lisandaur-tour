@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
-require_once __DIR__ . '/../utils/validate_image.php';
-require_once __DIR__ . '/../utils/upload_file.php';
+require_once __DIR__.'/../utils/validate-image.php';
+require_once __DIR__.'/../utils/upload-file.php';
 require_once __DIR__ . '/../utils/redirect-msg.php';
 
 // Protection CSRF pour s'assurer que le form est bien soumis depuis mon site
@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
 
   // validation de l'image si elle est présente
   if ($avatar['name']) {
-    $imageError = validate_image($_FILES['avatar'], 1_000_000);
+    $imageError = validateImage($_FILES['avatar'], 1_000_000);
     if ($imageError) $errors[] = $imageError;
   }
 
@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
       $_SESSION['add-user'] = "Pseudo ou Email déja utilisé 😢";
     } else {
       // upload image
-      $avatar_name = upload_file($_FILES['avatar'], '../images/avatars/');
+      $avatar_name = uploadFile($_FILES['avatar'], '../images/avatars/');
 
       if (!$avatar_name) {
         $_SESSION['add-user'] = "Erreur lors de l'upload de l'avatar 😢";

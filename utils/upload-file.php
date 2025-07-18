@@ -1,5 +1,5 @@
 <?php
-function upload_file($file, $folder): ?string
+function uploadFile($file, $folder): ?string
 {
   // créer le dossier s'il n'existe pas
   if (!is_dir($folder)) {
