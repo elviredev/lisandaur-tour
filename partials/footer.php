@@ -67,8 +67,20 @@
     </div>
 </footer>
 
+<!-- Modale utilisée pour confirmer la suppression d'un utilisateur -->
+<div id="confirm_modal" class="modal" style="display: none;">
+  <div class="modal__content">
+    <p id="modal_message">Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+    <div class="modal__actions">
+      <button id="confirm_delete_btn" class="btn danger">Oui</button>
+      <button id="cancel_delete_btn" class="btn edit">Non</button>
+    </div>
+  </div>
+</div>
+
 
 <script src="<?= ROOT_URL ?>js/fslightbox.js"></script>
+<!-- Version cache-busting forcer le rechargement du fichier JS quand on fait des modifs -->
 <script src="<?= ROOT_URL ?>js/main.js?v=<?= filemtime(__DIR__ . '/../js/main.js') ?>"></script>
 </body>
 </html>

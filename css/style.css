@@ -691,6 +691,43 @@ img {
   background-color: var(--grey-600);
 }
 
+/* ================================== MODAL ================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 1rem; /* utile pour le responsive */
+}
+.modal__content {
+  background-color: var(--nebula-900);
+  padding: 2rem;
+  border-radius: .5rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transform: translateY(-50%);
+}
+.modal__content p {
+  color: var(--pink-100);
+  font-family: var(--ff-2), serif;
+  font-size: var(--fs-md);
+  letter-spacing: 1px;
+}
+
+.modal__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.modal__actions button {
+  color: white;
+}
+
 /* ======================= GENERAL FORMS ======================= */
 .form__section {
   display: grid;
@@ -1322,6 +1359,12 @@ footer ul a:hover {
 
   #hide__sidebar-btn {
     display: none;
+  }
+
+  .modal__content {
+    padding: 1.5rem;
+    border-radius: 0;
+    transform: translateY(-40%);
   }
 
   .footer__container {

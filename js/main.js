@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoadMorePosts()
   initImagePreviews()
   initAlertMessage()
+  initDeleteModal()
 })
 
 /* ---------- Header BG ---------- */
@@ -146,7 +147,57 @@ function initImagePreviews() {
   });
 }
 
+/* ---------- DELETE MODAL ---------- */
+function initDeleteModal() {
+  const modal = document.getElementById('confirm_modal');
+  const modalMessage = document.getElementById('modal_message');
+  const confirmBtn = document.getElementById('confirm_delete_btn');
+  const cancelBtn = document.getElementById('cancel_delete_btn');
 
+  let currentForm = null;
+
+  document.querySelectorAll('.delete-user-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      currentForm = this
+      const fullname = this.querySelector('input[name="fullname"]').value
+      modalMessage.textContent = `Êtes-vous sûr de vouloir supprimer ${fullname}?`
+      modal.style.display = 'flex';
+    });
+  })
+
+  document.querySelectorAll('.delete-category-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      currentForm = this
+      const title = this.querySelector('input[name="title"]').value
+      modalMessage.textContent = `Êtes-vous sûr de vouloir supprimer ${title}?`
+      modal.style.display = 'flex';
+    });
+  })
+
+  document.querySelectorAll('.delete-post-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      currentForm = this
+      const title = this.querySelector('input[name="title"]').value
+      modalMessage.textContent = `Êtes-vous sûr de vouloir supprimer ${title}?`
+      modal.style.display = 'flex';
+    });
+  })
+
+  confirmBtn.addEventListener('click', function () {
+    if (currentForm) {
+      currentForm.submit();
+    }
+    modal.style.display = 'none';
+  })
+
+  cancelBtn.addEventListener('click', function () {
+    modal.style.display = 'none';
+    currentForm = null;
+  })
+}
 
 
 

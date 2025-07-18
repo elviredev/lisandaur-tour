@@ -57,6 +57,22 @@ $total_pages = $pagination['total_pages'];
         ?>
       </p>
     </div>
+  <?php elseif (isset($_SESSION['delete-user-success'])): ?>
+    <div class="alert__message success container">
+      <p>
+        <?= $_SESSION['delete-user-success'];
+        unset($_SESSION['delete-user-success']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['delete-user'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['delete-user'];
+        unset($_SESSION['delete-user']);
+        ?>
+      </p>
+    </div>
   <?php endif; ?>
 
   <div class="container dashboard__container">
@@ -133,7 +149,16 @@ $total_pages = $pagination['total_pages'];
             <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
             <td><?= $user['username'] ?></td>
             <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
-            <td><a href="#" class="btn sm danger">Suppr</a></td>
+            <td>
+              <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
+                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
+                <input type="hidden" name="fullname" value="<?= $user['firstname'] . ' ' . $user['lastname'] ?>">
+                <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
+
+                <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
+              </form>
+            </td>
             <td><?= $user['is_admin'] ? "Oui" : "Non" ?></td>
           </tr>
         <?php endforeach; ?>
@@ -150,8 +175,18 @@ $total_pages = $pagination['total_pages'];
             <p><strong>Pseudo :</strong> <?= $user['username'] ?></p>
             <p><strong>Admin :</strong> <?= $user['is_admin'] ? "Oui" : "Non" ?></p>
             <div class="card-actions">
-              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit">Editer</a>
-              <a href="#" class="btn sm danger">Suppr</a>
+              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit"
+              >
+                Editer
+              </a>
+              <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
+                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
+                <input type="hidden" name="fullname" value="<?= $user['firstname'] . ' ' . $user['lastname'] ?>">
+                <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
+
+                <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
+              </form>
             </div>
           </div>
           <?php endforeach; ?>
