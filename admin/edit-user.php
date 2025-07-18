@@ -64,6 +64,7 @@ if (isset($_GET['id'])) {
 
       <input type="text" name="firstname" value="<?= $user['firstname'] ?>" placeholder="Prénom">
       <input type="text" name="lastname" value="<?= $user['lastname'] ?>" placeholder="Nom">
+      <input type="text" name="username" value="<?= $user['username'] ?>" placeholder="Pseudo">
 
       <div class="form__control">
         <label for="role">Rôle Utilisateur</label>

@@ -14,6 +14,7 @@ if (!isset($_POST['csrf_token_edit_user']) || $_POST['csrf_token_edit_user'] !==
 $id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
 $firstname = filter_var(trim($_POST['firstname']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $lastname = filter_var(trim($_POST['lastname']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$username = filter_var(trim($_POST['username']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $is_admin = filter_var($_POST['user_role'], FILTER_VALIDATE_INT);
 
 // vérifier les champs requis
@@ -47,12 +48,12 @@ if (!empty($_FILES['avatar']['name'])) {
 
 // update user avec ou sans mise à jour de l'avatar
 if ($avatar_to_save) {
-  $stmt = $connection->prepare("UPDATE users SET firstname = ?, lastname = ?, is_admin = ?, avatar = ? WHERE id = ? LIMIT 1");
-  $stmt->bind_param('ssisi', $firstname, $lastname, $is_admin, $avatar_to_save, $id);
+  $stmt = $connection->prepare("UPDATE users SET firstname = ?, lastname = ?, username = ?, is_admin = ?, avatar = ? WHERE id = ? LIMIT 1");
+  $stmt->bind_param('sssisi', $firstname, $lastname, $username, $is_admin, $avatar_to_save, $id);
 } else {
   // update user sans avatar
-  $stmt = $connection->prepare("UPDATE users SET firstname = ?, lastname = ?, is_admin = ? WHERE id = ? LIMIT 1");
-  $stmt->bind_param('ssii', $firstname, $lastname, $is_admin, $id);
+  $stmt = $connection->prepare("UPDATE users SET firstname = ?, lastname = ?, username = ?, is_admin = ? WHERE id = ? LIMIT 1");
+  $stmt->bind_param('sssii', $firstname, $lastname, $username, $is_admin, $id);
 }
 
 if ($stmt->execute()) {
