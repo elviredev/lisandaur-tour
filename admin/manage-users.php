@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
 require_once __DIR__.'/../utils/token.php';
+require_once __DIR__.'/../utils/sanitize.php';
 
 $page_title = "Gérer les utilisateurs";
 include 'partials/header.php';
@@ -146,15 +147,15 @@ $total_pages = $pagination['total_pages'];
         <tbody>
         <?php foreach ($users as $user): ?>
           <tr>
-            <td><?= htmlspecialchars($user['firstname']).' '.htmlspecialchars($user['lastname']) ?></td>
-            <td><?= htmlspecialchars($user['username']) ?></td>
-            <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= htmlspecialchars($user['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
+            <td><?= e($user['firstname']).' '.e($user['lastname']) ?></td>
+            <td><?= e($user['username']) ?></td>
+            <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= e($user['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
             <td>
               <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
-                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+                <input type="hidden" name="id" value="<?= e($user['id']) ?>">
                 <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
-                <input type="hidden" name="fullname" value="<?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>">
-                <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
+                <input type="hidden" name="fullname" value="<?= e($user['firstname']) . ' ' . e($user['lastname']) ?>">
+                <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
                 <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
               </form>
@@ -170,20 +171,20 @@ $total_pages = $pagination['total_pages'];
           <?php foreach ($users as $user): ?>
             <div class="card-mobile">
             <p>
-              <strong>Nom :</strong> <?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>
+              <strong>Nom :</strong> <?= e($user['firstname']) . ' ' . e($user['lastname']) ?>
             </p>
-            <p><strong>Pseudo :</strong> <?= htmlspecialchars($user['username']) ?></p>
-            <p><strong>Admin :</strong> <?= htmlspecialchars($user['is_admin']) ? "Oui" : "Non" ?></p>
+            <p><strong>Pseudo :</strong> <?= e($user['username']) ?></p>
+            <p><strong>Admin :</strong> <?= e($user['is_admin']) ? "Oui" : "Non" ?></p>
             <div class="card-actions">
-              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= htmlspecialchars($user['id']) ?>&page=<?= $page ?>" class="btn sm edit"
+              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= e($user['id']) ?>&page=<?= $page ?>" class="btn sm edit"
               >
                 Editer
               </a>
               <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
-                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+                <input type="hidden" name="id" value="<?= e($user['id']) ?>">
                 <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
-                <input type="hidden" name="fullname" value="<?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>">
-                <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
+                <input type="hidden" name="fullname" value="<?= e($user['firstname']) . ' ' . e($user['lastname']) ?>">
+                <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
                 <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
               </form>

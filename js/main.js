@@ -166,7 +166,7 @@ function initDeleteModal() {
     });
   })
 
-  document.querySelectorAll('.delete-category-form').forEach(form => {
+  document.querySelectorAll('.delete-country-form').forEach(form => {
     form.addEventListener('submit', function (e) {
       e.preventDefault()
       currentForm = this

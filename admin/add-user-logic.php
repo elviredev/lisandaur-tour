@@ -4,6 +4,7 @@ require_once __DIR__ . '/../utils/admin-only.php';
 require_once __DIR__.'/../utils/validate-image.php';
 require_once __DIR__.'/../utils/upload-file.php';
 require_once __DIR__ . '/../utils/redirect-msg.php';
+require_once __DIR__ . '/../utils/sanitize.php';
 
 // Protection CSRF pour s'assurer que le form est bien soumis depuis mon site
 if (!isset($_POST['csrf_token_add_user']) || $_POST['csrf_token_add_user'] !== $_SESSION['csrf_token_add_user']) {
@@ -13,14 +14,14 @@ if (!isset($_POST['csrf_token_add_user']) || $_POST['csrf_token_add_user'] !== $
 // get form data if signup button was clicked
 if (isset($_POST['submit'])) {
   // sanityze inputs
-  $firstname = trim($_POST['firstname']);
-  $lastname = trim($_POST['lastname']);
-  $username = trim($_POST['username']);
-  $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-  $create_password = trim($_POST['create_password']);
-  $confirm_password = trim($_POST['confirm_password']);
-  $is_admin = filter_var($_POST['user_role'], FILTER_SANITIZE_NUMBER_INT);
-  $avatar = $_FILES['avatar'];
+  $firstname = sanitizeText($_POST['firstname'] ?? '');
+  $lastname = sanitizeText($_POST['lastname'] ?? '');
+  $username = sanitizeText($_POST['username'] ?? '');
+  $email = sanitizeEmail($_POST['email'] ?? '');
+  $create_password = trim($_POST['create_password'] ?? '');
+  $confirm_password = trim($_POST['confirm_password'] ?? '');
+  $is_admin = sanitizeInt($_POST['user_role'] ?? 0);
+  $avatar = sanitizeFile($_FILES['avatar'] ?? []);
 
   // stocker les erreurs
   $errors = [];

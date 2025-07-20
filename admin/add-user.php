@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
 require_once __DIR__ . '/../utils/token.php';
+require_once __DIR__ . '/../utils/sanitize.php';
 
 $page_title = "Ajouter un utilisateur";
 include 'partials/header.php';
@@ -38,10 +39,10 @@ unset($_SESSION['add-user-data']);
     <form action="<?= ROOT_URL ?>admin/add-user-logic.php" enctype="multipart/form-data" method="POST">
       <input type="hidden" name="csrf_token_add_user" value="<?= $csrf_token; ?>">
 
-      <input type="text" name="firstname" value="<?= htmlspecialchars($firstname ?? '') ?>" placeholder="Prénom">
-      <input type="text" name="lastname" value="<?= htmlspecialchars($lastname ?? '') ?>" placeholder="Nom">
-      <input type="text" name="username" value="<?= htmlspecialchars($username ?? '') ?>" placeholder="Pseudo">
-      <input type="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" placeholder="Email">
+      <input type="text" name="firstname" value="<?= e($firstname ?? '') ?>" placeholder="Prénom">
+      <input type="text" name="lastname" value="<?= e($lastname ?? '') ?>" placeholder="Nom">
+      <input type="text" name="username" value="<?= e($username ?? '') ?>" placeholder="Pseudo">
+      <input type="email" name="email" value="<?= e($email ?? '') ?>" placeholder="Email">
       <input type="password" name="create_password" placeholder="Créer mot de passe">
       <input type="password" name="confirm_password" placeholder="Confirmer mot de passe">
 
