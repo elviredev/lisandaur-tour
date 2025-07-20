@@ -9,7 +9,7 @@ include 'partials/header.php';
 include 'partials/pagination.php';
 
 // Génération d'un token CSRF
-$csrf_token = generateCSRFToken('csrf_token_delete_country');
+//$csrf_token = generateCSRFToken('csrf_token_delete_country');
 
 // récupérer les pays
 $baseQuery = "SELECT * FROM countries ORDER BY title";

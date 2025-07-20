@@ -19,7 +19,7 @@ $username = sanitizeText($_POST['username'] ?? '');
 $is_admin = sanitizeInt($_POST['user_role'] ?? 0);
 
 // vérifier les champs requis
-if (!$id || !$firstname || !$lastname) {
+if (!$id || !$firstname || !$lastname || !$username) {
   redirectWithMessage(ROOT_URL . "admin/edit-user.php?id=$id", 'edit-user', 'Ces champs sont requis 😢');
 }
 

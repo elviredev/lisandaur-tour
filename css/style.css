@@ -1125,8 +1125,8 @@ footer ul a:hover {
   margin-top: 4rem;
 }
 
-/* ======================= MEDIA QUERIES (MEDIUM DEVICES 1110) ======================= */
-@media screen and (max-width: 1110px) {
+/* ======================= MEDIA QUERIES (MEDIUM DEVICES 1300) ======================= */
+@media screen and (max-width: 1300px) {
   table {
     display: none;
   }
@@ -1165,7 +1165,10 @@ footer ul a:hover {
     display: flex;
     gap: .5rem;
   }
+}
 
+/* ======================= MEDIA QUERIES (MEDIUM DEVICES 1110) ======================= */
+@media screen and (max-width: 1110px) {
   .dashboard__container {
     grid-template-columns: 4.3rem auto;
     padding: 0;

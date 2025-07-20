@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
     <form action="<?= ROOT_URL ?>admin/edit-user-logic.php" enctype="multipart/form-data" method="POST">
       <input type="hidden" name="id" value="<?= e($user['id']) ?>">
       <input type="hidden" name="csrf_token_edit_user" value="<?= $csrf_token ?>">
-      <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
+      <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
       <input type="text" name="firstname" value="<?= e($user['firstname']) ?>" placeholder="Prénom">
       <input type="text" name="lastname" value="<?= e($user['lastname']) ?>" placeholder="Nom">
