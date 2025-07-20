@@ -1,13 +1,76 @@
 <?php
 require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
+require_once __DIR__.'/../utils/token.php';
+require_once __DIR__.'/../utils/sanitize.php';
 
 $page_title = "Gérer les pays";
-include 'partials/header.php'
+include 'partials/header.php';
+include 'partials/pagination.php';
+
+// Génération d'un token CSRF
+$csrf_token = generateCSRFToken('csrf_token_delete_country');
+
+// récupérer les pays
+$baseQuery = "SELECT * FROM countries ORDER BY title";
+$pagination = paginate($baseQuery, $connection, 3);
+$countries = $pagination['items'];
+$page = $pagination['page'];
+$total_pages = $pagination['total_pages'];
 ?>
 
 <!-- SECTION DASHBOARD START -->
 <section class="dashboard">
+  <?php if (isset($_SESSION['add-country-success'])): ?>
+    <div class="alert__message success container">
+      <p>
+        <?= $_SESSION['add-country-success'];
+        unset($_SESSION['add-country-success']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['add-country'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['add-country'];
+        unset($_SESSION['add-country']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['edit-country-success'])): ?>
+    <div class="alert__message success container">
+      <p>
+        <?= $_SESSION['edit-country-success'];
+        unset($_SESSION['edit-country-success']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['edit-country'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['edit-country'];
+        unset($_SESSION['edit-country']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['delete-country-success'])): ?>
+    <div class="alert__message success container">
+      <p>
+        <?= $_SESSION['delete-country-success'];
+        unset($_SESSION['delete-country-success']);
+        ?>
+      </p>
+    </div>
+  <?php elseif (isset($_SESSION['delete-country'])): ?>
+    <div class="alert__message error container">
+      <p>
+        <?= $_SESSION['delete-country'];
+        unset($_SESSION['delete-country']);
+        ?>
+      </p>
+    </div>
+  <?php endif; ?>
+  
   <div class="container dashboard__container">
     <!-- BUTTON FOR MOBILES -->
     <button id="show__sidebar-btn" class="sidebar__toggle">
@@ -65,6 +128,7 @@ include 'partials/header.php'
     <main>
       <h2>Gérer les pays</h2>
       <!-- FORMAT DESKTOP -->
+      <?php if (count($countries) > 0): ?>
       <table>
         <thead>
         <tr>
@@ -76,74 +140,42 @@ include 'partials/header.php'
         </tr>
         </thead>
         <tbody>
+        <?php foreach ($countries as $country): ?>
         <tr>
-          <td>Japon</td>
+          <td><?= e($country['title']) ?></td>
           <td>
-            <img class="country__flag" src="images/japon.png" alt="flag">
+            <img class="country__flag" src="<?= ROOT_URL ?>images/flags/<?= e($country['flag']) ?>" alt="flag">
           </td>
-          <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste labore quia quidem.</td>
-          <td><a href="edit-country.php" class="btn sm edit">Editer</a></td>
+          <td><?= e($country['description']) ?></td>
+          <td><a href="<?= ROOT_URL ?>admin/edit-country.php?id=<?= e($country['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
           <td><a href="#" class="btn sm danger">Suppr</a></td>
         </tr>
-        <tr>
-          <td>Corée</td>
-          <td>
-            <img class="country__flag" src="images/coree-du-sud.png" alt="flag">
-          </td>
-          <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit</td>
-          <td><a href="edit-country.php" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
-        </tr>
-        <tr>
-          <td>Espagne</td>
-          <td>
-            <img class="country__flag" src="images/espagne.png" alt="flag">
-          </td>
-          <td>Lorem ipsum dolor sit amet consectetur 🥘</td>
-          <td><a href="edit-country.php" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
-        </tr>
+        <?php endforeach; ?>
         </tbody>
       </table>
       <!-- FORMAT MOBILE -->
       <div class="card-mobile__container">
+        <?php foreach ($countries as $country): ?>
         <div class="card-mobile">
-          <p><strong>Pays :</strong> Japon</p>
+          <p><strong>Pays :</strong> <?= e($country['title']) ?></p>
           <p class="card-mobile__flag-container">
             <strong>Drapeau :</strong>
-            <img class="country__flag" src="images/japon.png" alt="flag">
+            <img class="country__flag" src="<?= ROOT_URL ?>images/flags/<?= e($country['flag']) ?>" alt="flag">
           </p>
-          <p><strong>Description :</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci facilis molestias suscipit?</p>
+          <p><strong>Description :</strong> <?= e($country['description']) ?></p>
           <div class="card-actions">
-            <a href="edit-country.php" class="btn sm edit">Editer</a>
+            <a href="<?= ROOT_URL ?>admin/edit-country.php?id=<?= e($country['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a>
             <a href="#" class="btn sm danger">Suppr</a>
           </div>
         </div>
-        <div class="card-mobile">
-          <p><strong>Pays :</strong> Corée</p>
-          <p class="card-mobile__flag-container">
-            <strong>Drapeau :</strong>
-            <img class="country__flag" src="images/coree-du-sud.png" alt="flag">
-          </p>
-          <p><strong>Description :</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-          <div class="card-actions">
-            <a href="edit-country.php" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
-          </div>
-        </div>
-        <div class="card-mobile">
-          <p><strong>Pays :</strong> Espagne</p>
-          <p class="card-mobile__flag-container">
-            <strong>Drapeau :</strong>
-            <img class="country__flag" src="images/espagne.png" alt="flag">
-          </p>
-          <p><strong>Description :</strong> Lorem ipsum dolor sit amet consectetur 🥘</p>
-          <div class="card-actions">
-            <a href="edit-country.php" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
-          </div>
-        </div>
+        <?php endforeach; ?>
       </div>
+      <?php else: ?>
+        <div class="alert__message error">Aucun pays n'a été trouvé</div>
+      <?php endif; ?>
+
+      <!-- Pagination -->
+      <?php include 'partials/pagination-template.php'; ?>
     </main>
   </div>
 </section>
