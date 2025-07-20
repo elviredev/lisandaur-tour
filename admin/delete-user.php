@@ -2,6 +2,7 @@
 require_once __DIR__. '/../config/init.php';
 require_once __DIR__. '/../utils/admin-only.php';
 require_once __DIR__. '/../utils/redirect-msg.php';
+require_once __DIR__. '/../utils/sanitize.php';
 
 // protection: methode POST uniquement
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'], $_POST['csrf_token_delete_user'])) {
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'], $_POST['csrf_to
     redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'delete-user', 'CSRF token invalide 🔐');
   }
 
-  $id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
+  $id = sanitizeInt($_POST['id']);
 
   if(!$id) {
     redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'delete-user', 'ID utilisateur incorrect ❌');

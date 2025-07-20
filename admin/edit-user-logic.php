@@ -4,6 +4,7 @@ require_once __DIR__.'/../utils/redirect-msg.php';
 require_once __DIR__.'/../utils/validate-image.php';
 require_once __DIR__.'/../utils/upload-file.php';
 require_once __DIR__.'/../utils/upload-and-replace.php';
+require_once __DIR__.'/../utils/sanitize.php';
 
 // protection CSRF pour s'assurer que le form est bien soumis depuis mon site
 if (!isset($_POST['csrf_token_edit_user']) || $_POST['csrf_token_edit_user'] !== $_SESSION['csrf_token_edit_user']) {
@@ -11,11 +12,11 @@ if (!isset($_POST['csrf_token_edit_user']) || $_POST['csrf_token_edit_user'] !==
 }
 
 // nettoyage et validation des champs
-$id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
-$firstname = trim($_POST['firstname']);
-$lastname =trim($_POST['lastname']);
-$username = trim($_POST['username']);
-$is_admin = filter_var($_POST['user_role'], FILTER_VALIDATE_INT);
+$id = sanitizeInt($_POST['id'] ?? 0);
+$firstname = sanitizeText($_POST['firstname'] ?? '');
+$lastname =sanitizeText($_POST['lastname'] ?? '');
+$username = sanitizeText($_POST['username'] ?? '');
+$is_admin = sanitizeInt($_POST['user_role'] ?? 0);
 
 // vérifier les champs requis
 if (!$id || !$firstname || !$lastname) {

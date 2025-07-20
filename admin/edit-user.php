@@ -3,6 +3,7 @@ require_once __DIR__ . '/../config/init.php';
 require_once __DIR__ . '/../utils/admin-only.php';
 require_once __DIR__.'/../utils/token.php';
 require_once __DIR__.'/../utils/redirect-msg.php';
+require_once __DIR__.'/../utils/sanitize.php';
 
 $page_title = "Modifier un utilisateur";
 include 'partials/header.php';
@@ -12,7 +13,7 @@ $csrf_token = generateCSRFToken('csrf_token_edit_user');
 
 // récupérer ID depuis l'URL
 if (isset($_GET['id'])) {
-  $id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+  $id = sanitizeInt($_GET['id']);
 
   if (!$id) {
     // si ID invalide (ex. abc, -1, etc)
@@ -58,13 +59,13 @@ if (isset($_GET['id'])) {
     <?php endif; ?>
 
     <form action="<?= ROOT_URL ?>admin/edit-user-logic.php" enctype="multipart/form-data" method="POST">
-      <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+      <input type="hidden" name="id" value="<?= e($user['id']) ?>">
       <input type="hidden" name="csrf_token_edit_user" value="<?= $csrf_token ?>">
       <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
 
-      <input type="text" name="firstname" value="<?= htmlspecialchars($user['firstname']) ?>" placeholder="Prénom">
-      <input type="text" name="lastname" value="<?= htmlspecialchars($user['lastname']) ?>" placeholder="Nom">
-      <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" placeholder="Pseudo">
+      <input type="text" name="firstname" value="<?= e($user['firstname']) ?>" placeholder="Prénom">
+      <input type="text" name="lastname" value="<?= e($user['lastname']) ?>" placeholder="Nom">
+      <input type="text" name="username" value="<?= e($user['username']) ?>" placeholder="Pseudo">
 
       <div class="form__control">
         <label for="role">Rôle Utilisateur</label>
@@ -77,7 +78,7 @@ if (isset($_GET['id'])) {
       <div class="form__control">
         <label for="avatar">Avatar Utilisateur</label>
         <?php if ($user['avatar']): ?>
-          <img src="<?= ROOT_URL . 'images/avatars/' . htmlspecialchars($user['avatar'])  ?>" alt="preview avatar" class="previsualisation__img" id="preview-avatar">
+          <img src="<?= ROOT_URL . 'images/avatars/' . e($user['avatar'])  ?>" alt="preview avatar" class="previsualisation__img" id="preview-avatar">
         <?php endif; ?>
         <input type="file" name="avatar" id="avatar">
       </div>
