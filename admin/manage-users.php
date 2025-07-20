@@ -157,7 +157,7 @@ $total_pages = $pagination['total_pages'];
                 <input type="hidden" name="fullname" value="<?= e($user['firstname']) . ' ' . e($user['lastname']) ?>">
                 <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
-                <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
+                <button type="submit" class="btn sm danger">Suppr</button>
               </form>
             </td>
             <td><?= $user['is_admin'] ? "Oui" : "Non" ?></td>

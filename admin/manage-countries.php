@@ -9,7 +9,7 @@ include 'partials/header.php';
 include 'partials/pagination.php';
 
 // Génération d'un token CSRF
-//$csrf_token = generateCSRFToken('csrf_token_delete_country');
+$csrf_token = generateCSRFToken('csrf_token_delete_country');
 
 // récupérer les pays
 $baseQuery = "SELECT * FROM countries ORDER BY title";
@@ -148,7 +148,16 @@ $total_pages = $pagination['total_pages'];
           </td>
           <td><?= e($country['description']) ?></td>
           <td><a href="<?= ROOT_URL ?>admin/edit-country.php?id=<?= e($country['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
-          <td><a href="#" class="btn sm danger">Suppr</a></td>
+          <td>
+            <form action="<?= ROOT_URL ?>admin/delete-country.php" method="POST" class="delete-country-form" style="display: inline-block;">
+              <input type="hidden" name="id" value="<?= e($country['id']) ?>">
+              <input type="hidden" name="csrf_token_delete_country" value="<?= $csrf_token ?>">
+              <input type="hidden" name="title" value="<?= e($country['title']) ?>">
+              <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
+
+              <button type="submit" class="btn sm danger">Suppr</button>
+            </form>
+          </td>
         </tr>
         <?php endforeach; ?>
         </tbody>
