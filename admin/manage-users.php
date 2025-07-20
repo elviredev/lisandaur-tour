@@ -146,14 +146,14 @@ $total_pages = $pagination['total_pages'];
         <tbody>
         <?php foreach ($users as $user): ?>
           <tr>
-            <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
-            <td><?= $user['username'] ?></td>
-            <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
+            <td><?= htmlspecialchars($user['firstname']).' '.htmlspecialchars($user['lastname']) ?></td>
+            <td><?= htmlspecialchars($user['username']) ?></td>
+            <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= htmlspecialchars($user['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a></td>
             <td>
               <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
-                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
                 <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
-                <input type="hidden" name="fullname" value="<?= $user['firstname'] . ' ' . $user['lastname'] ?>">
+                <input type="hidden" name="fullname" value="<?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>">
                 <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
 
                 <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
@@ -170,19 +170,19 @@ $total_pages = $pagination['total_pages'];
           <?php foreach ($users as $user): ?>
             <div class="card-mobile">
             <p>
-              <strong>Nom :</strong> <?= "{$user['firstname']} {$user['lastname']}" ?>
+              <strong>Nom :</strong> <?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>
             </p>
-            <p><strong>Pseudo :</strong> <?= $user['username'] ?></p>
-            <p><strong>Admin :</strong> <?= $user['is_admin'] ? "Oui" : "Non" ?></p>
+            <p><strong>Pseudo :</strong> <?= htmlspecialchars($user['username']) ?></p>
+            <p><strong>Admin :</strong> <?= htmlspecialchars($user['is_admin']) ? "Oui" : "Non" ?></p>
             <div class="card-actions">
-              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>&page=<?= $page ?>" class="btn sm edit"
+              <a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= htmlspecialchars($user['id']) ?>&page=<?= $page ?>" class="btn sm edit"
               >
                 Editer
               </a>
               <form action="<?= ROOT_URL ?>admin/delete-user.php" method="POST" class="delete-user-form" style="display: inline-block;">
-                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
                 <input type="hidden" name="csrf_token_delete_user" value="<?= $csrf_token ?>">
-                <input type="hidden" name="fullname" value="<?= $user['firstname'] . ' ' . $user['lastname'] ?>">
+                <input type="hidden" name="fullname" value="<?= htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']) ?>">
                 <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
 
                 <button type="submit" class="btn sm danger delete-user-btn">Suppr</button>
@@ -192,7 +192,7 @@ $total_pages = $pagination['total_pages'];
           <?php endforeach; ?>
         </div>
       <?php else: ?>
-        <div class="alert__message error">Aucun utilisateur trouvé</div>
+        <div class="alert__message error">Aucun utilisateur n'a été trouvé</div>
       <?php endif; ?>
 
       <!-- Pagination -->

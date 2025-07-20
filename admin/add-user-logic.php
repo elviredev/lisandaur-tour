@@ -13,12 +13,12 @@ if (!isset($_POST['csrf_token_add_user']) || $_POST['csrf_token_add_user'] !== $
 // get form data if signup button was clicked
 if (isset($_POST['submit'])) {
   // sanityze inputs
-  $firstname = filter_var($_POST['firstname'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $lastname = filter_var($_POST['lastname'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $username = filter_var($_POST['username'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $firstname = trim($_POST['firstname']);
+  $lastname = trim($_POST['lastname']);
+  $username = trim($_POST['username']);
   $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-  $create_password = filter_var($_POST['create_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $confirm_password = filter_var($_POST['confirm_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $create_password = trim($_POST['create_password']);
+  $confirm_password = trim($_POST['confirm_password']);
   $is_admin = filter_var($_POST['user_role'], FILTER_SANITIZE_NUMBER_INT);
   $avatar = $_FILES['avatar'];
 

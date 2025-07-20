@@ -12,9 +12,9 @@ if (!isset($_POST['csrf_token_edit_user']) || $_POST['csrf_token_edit_user'] !==
 
 // nettoyage et validation des champs
 $id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
-$firstname = filter_var(trim($_POST['firstname']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$lastname = filter_var(trim($_POST['lastname']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$username = filter_var(trim($_POST['username']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$firstname = trim($_POST['firstname']);
+$lastname =trim($_POST['lastname']);
+$username = trim($_POST['username']);
 $is_admin = filter_var($_POST['user_role'], FILTER_VALIDATE_INT);
 
 // vérifier les champs requis

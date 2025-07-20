@@ -62,9 +62,9 @@ if (isset($_GET['id'])) {
       <input type="hidden" name="csrf_token_edit_user" value="<?= $csrf_token ?>">
       <input type="hidden" name="page" value="<?= $_GET['page'] ?? 1 ?>">
 
-      <input type="text" name="firstname" value="<?= $user['firstname'] ?>" placeholder="Prénom">
-      <input type="text" name="lastname" value="<?= $user['lastname'] ?>" placeholder="Nom">
-      <input type="text" name="username" value="<?= $user['username'] ?>" placeholder="Pseudo">
+      <input type="text" name="firstname" value="<?= htmlspecialchars($user['firstname']) ?>" placeholder="Prénom">
+      <input type="text" name="lastname" value="<?= htmlspecialchars($user['lastname']) ?>" placeholder="Nom">
+      <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" placeholder="Pseudo">
 
       <div class="form__control">
         <label for="role">Rôle Utilisateur</label>
@@ -77,7 +77,7 @@ if (isset($_GET['id'])) {
       <div class="form__control">
         <label for="avatar">Avatar Utilisateur</label>
         <?php if ($user['avatar']): ?>
-          <img src="<?= ROOT_URL . 'images/avatars/' . $user['avatar']  ?>" alt="preview avatar" class="previsualisation__img" id="preview-avatar">
+          <img src="<?= ROOT_URL . 'images/avatars/' . htmlspecialchars($user['avatar'])  ?>" alt="preview avatar" class="previsualisation__img" id="preview-avatar">
         <?php endif; ?>
         <input type="file" name="avatar" id="avatar">
       </div>
