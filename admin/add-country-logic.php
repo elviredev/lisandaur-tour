@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
     if (!$flag_name) {
       $_SESSION['add-country'] = "Erreur lors de l'upload du drapeau 😢";
     } else {
-      // enregistrer le drapeau dans la bdd
+      // enregistrer le pays dans la bdd
       $insert = $connection->prepare("INSERT INTO countries (title, description, flag) VALUES (?, ?, ?)");
       $insert->bind_param("sss", $title, $description, $flag_name);
       $insert->execute();

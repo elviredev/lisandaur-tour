@@ -17,8 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'], $_POST['csrf_to
     redirectWithMessage(ROOT_URL . 'admin/manage-countries.php', 'delete-country', 'ID pays incorrect ❌');
   }
 
-  // empêcher suppression du country "nocountry"
-  // TODO
+  // empêcher suppression du country "nocountry" (pour les articles sans pays lié)
+  if ($id === UNCATEGORIZED_COUNTRY_ID) {
+    redirectWithMessage(ROOT_URL . 'admin/manage-countries.php', 'delete-country', 'Le pays "Uncategorized" (non classé) ne peut pas être supprimé 🚫');
+  }
 
   // récupérer country en bdd
   $stmt = $connection->prepare("SELECT title, description, flag FROM countries WHERE id = ?");

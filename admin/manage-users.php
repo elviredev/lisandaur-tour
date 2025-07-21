@@ -115,14 +115,14 @@ $total_pages = $pagination['total_pages'];
           </li>
           <li>
             <a href="add-country.php">
-              <i class="uil uil-edit"></i>
+              <i class="uil uil-directions"></i>
               <h5>Ajouter un pays</h5>
             </a>
           </li>
           <li>
             <a href="manage-countries.php">
-              <i class="uil uil-list-ul"></i>
-              <h5>Gérer les  pays</h5>
+              <i class="uil uil-globe"></i>
+              <h5>Gérer les pays</h5>
             </a>
           </li>
         <?php endif; ?>

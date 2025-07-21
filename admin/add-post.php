@@ -1,6 +1,29 @@
 <?php
+require_once __DIR__ . '/../config/init.php';
+require_once __DIR__ . '/../utils/sanitize.php';
+require_once __DIR__ . '/../utils/token.php';
+
 $page_title = "Ajouter un article";
-include 'partials/header.php'
+include 'partials/header.php';
+
+// Génération d'un token CSRF
+$csrf_token = generateCSRFToken('csrf_token_add_post');
+
+// fetch countries from bdd
+$stmt = $connection->prepare("SELECT * FROM countries ORDER BY title");
+$stmt->execute();
+$countries = $stmt->get_result();
+$stmt->close();
+
+// récupérer les anciennes valeurs si erreur
+$title = $_SESSION['add-post-data']['title'] ?? '';
+$country_id = $_SESSION['add-post-data']['country'] ?? '';
+$year = $_SESSION['add-post-data']['year'] ?? '';
+$body = $_SESSION['add-post-data']['body'] ?? '';
+$is_featured = isset($_SESSION['add-post-data']['is_featured']) ? 'checked' : '';
+
+// nettoie une fois utilisé
+unset($_SESSION['add-post-data']);
 ?>
 
 
@@ -9,42 +32,45 @@ include 'partials/header.php'
   <div class="container form__section-container dashboard__form-container">
     <h2>Ajouter un article</h2>
 
-    <div class="alert__message error">
-      <p>Ici un message d'erreurs sera affiché</p>
-    </div>
+    <?php if (isset($_SESSION['add-post'])): ?>
+      <div class="alert__message error">
+        <p>
+          <?= $_SESSION['add-post'];
+          unset($_SESSION['add-post']);
+          ?>
+        </p>
+      </div>
+    <?php endif; ?>
 
-    <form action="" enctype="multipart/form-data">
+    <form action="<?= ROOT_URL ?>admin/add-post-logic.php" enctype="multipart/form-data" method="POST">
+      <input type="hidden" name="csrf_token_add_post" value="<?= $csrf_token ?>">
 
-      <input type="text" name="title" placeholder="Titre de l'article">
+      <input type="text" name="title" value="<?= e($title) ?>" placeholder="Titre de l'article">
 
       <select name="country">
-        <option value="1">Japon</option>
-        <option value="1">Islande</option>
-        <option value="1">Corée</option>
-        <option value="1">Espagne</option>
-        <option value="1">Italie</option>
-        <option value="1">Angleterre</option>
-        <option value="1">Madeire</option>
+        <?php foreach ($countries as $country): ?>
+          <option value="<?= $country['id'] ?>"><?= e($country['title']) ?></option>
+        <?php endforeach; ?>
       </select>
 
       <select name="year">
-        <option value="1">2025</option>
-        <option value="1">2024</option>
-        <option value="1">2023</option>
-        <option value="1">2022</option>
-        <option value="1">2021</option>
-        <option value="1">2020</option>
-        <option value="1">2019</option>
-        <option value="1">2018</option>
-        <option value="1">2017</option>
+        <?php
+          $currentYear = date('Y');
+          for ($y = $currentYear; $y >= 2010; $y--) {
+            $selected = ($year == $y) ? 'selected' : '';
+            echo "<option value='$y' $selected>$y</option>";
+          }
+        ?>
       </select>
 
-      <textarea rows="10" name="body" placeholder="Contenu de l'article"></textarea>
+      <textarea rows="10" name="body" placeholder="Contenu de l'article"><?= e($body) ?></textarea>
 
-      <div class="form__control inline">
-        <input type="checkbox" id="is_featured" checked />
-        <label for="is_featured">En vedette</label>
-      </div>
+      <?php if (isset($_SESSION['user_is_admin'])): ?>
+        <div class="form__control inline">
+          <input type="checkbox" id="is_featured" value="1" name="is_featured" <?= $is_featured ?> />
+          <label for="is_featured">En vedette</label>
+        </div>
+      <?php endif; ?>
 
       <div class="form__control">
         <label for="thumbnail">Ajouter une image principale</label>

@@ -110,14 +110,14 @@ $total_pages = $pagination['total_pages'];
           </li>
           <li>
             <a href="add-country.php">
-              <i class="uil uil-edit"></i>
+              <i class="uil uil-directions"></i>
               <h5>Ajouter un pays</h5>
             </a>
           </li>
           <li>
-            <a href="manage-countries.php" class="active">
-              <i class="uil uil-list-ul"></i>
-              <h5>Gérer les  pays</h5>
+            <a href="manage-countries.php">
+              <i class="uil uil-globe"></i>
+              <h5>Gérer les pays</h5>
             </a>
           </li>
         <?php endif; ?>
@@ -174,7 +174,15 @@ $total_pages = $pagination['total_pages'];
           <p><strong>Description :</strong> <?= e($country['description']) ?></p>
           <div class="card-actions">
             <a href="<?= ROOT_URL ?>admin/edit-country.php?id=<?= e($country['id']) ?>&page=<?= $page ?>" class="btn sm edit">Editer</a>
-            <a href="#" class="btn sm danger">Suppr</a>
+
+            <form action="<?= ROOT_URL ?>admin/delete-country.php" method="POST" class="delete-country-form" style="display: inline-block;">
+              <input type="hidden" name="id" value="<?= e($country['id']) ?>">
+              <input type="hidden" name="csrf_token_delete_country" value="<?= $csrf_token ?>">
+              <input type="hidden" name="title" value="<?= e($country['title']) ?>">
+              <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
+
+              <button type="submit" class="btn sm danger">Suppr</button>
+            </form>
           </div>
         </div>
         <?php endforeach; ?>
