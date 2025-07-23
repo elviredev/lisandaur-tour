@@ -33,6 +33,13 @@ if (isset($_GET['id'])) {
   }
 
   $stmt->close();
+
+  // récupérer les anciennes valeurs si erreur
+  $title = $_SESSION['edit-country-data']['title'] ?? '';
+  $description = $_SESSION['edit-country-data']['description'] ?? '';
+
+  // nettoie une fois utilisé
+  unset($_SESSION['edit-country-data']);
 } else {
   // si ID non fournit dans l'URL
   redirectWithMessage(ROOT_URL . 'admin/manage-countries.php', 'edit-country', 'ID pays non fournit 🤔');
@@ -60,8 +67,8 @@ if (isset($_GET['id'])) {
       <input type="hidden" name="csrf_token_edit_country" value="<?= $csrf_token ?>">
       <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
-      <input type="text" name="title" value="<?= e($country['title']) ?>" placeholder="Nom du pays">
-      <textarea rows="4" name="description" placeholder="Description"><?= e($country['description']) ?></textarea>
+      <input type="text" name="title" value="<?= e($title ?: $country['title']) ?>" placeholder="Nom du pays">
+      <textarea rows="4" name="description" placeholder="Description"><?= e($description ?: $country['description']) ?></textarea>
 
       <div class="form__control">
         <label for="flag">Drapeau du pays</label>

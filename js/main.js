@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  initHeaderScroll()
-  initSideMenu()
-  initSidebarMobile()
-  initLoadMorePosts()
-  initImagePreviews()
-  initAlertMessage()
-  initDeleteModal()
+  initHeaderScroll?.()
+  initSideMenu?.()
+  initSidebarMobile?.()
+  initLoadMorePosts?.()
+  initImagePreviews?.()
+  initAlertMessage?.()
+  initDeleteModal?.()
+  initRemoveImageButtons?.()
 })
 
 /* ---------- Header BG ---------- */
@@ -146,6 +147,33 @@ function initImagePreviews() {
     }
   });
 }
+
+/* ---------- REMOVE IMAGE ---------- */
+function initRemoveImage(event, imageType) {
+  const preview = document.getElementById('preview-' + imageType);
+  const input = document.getElementById(imageType);
+  const removeField = document.getElementById('remove-' + imageType);
+  const btn = event.target;
+
+  if (preview) preview.style.display = 'none';
+  if (btn) btn.style.display = 'none';
+  if (input) input.value = '';
+  if (removeField) removeField.value = '1';
+}
+
+/* ---------- REMOVE IMAGE BUTTONS ---------- */
+function initRemoveImageButtons() {
+  const buttons = document.querySelectorAll('.remove-image-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function (event) {
+      const imageType = btn.dataset.imageType;
+      if (imageType) {
+        initRemoveImage(event, imageType);
+      }
+    });
+  });
+}
+
 
 /* ---------- DELETE MODAL ---------- */
 function initDeleteModal() {

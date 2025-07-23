@@ -35,6 +35,17 @@ if (isset($_GET['id'])) {
 
   $stmt->close();
 
+  // récupérer les anciennes valeurs si erreur
+  $firstname = $_SESSION['edit-user-data']['firstname'] ?? '';
+  $lastname = $_SESSION['edit-user-data']['lastname'] ?? '';
+  $username = $_SESSION['edit-user-data']['username'] ?? '';
+  $selected_role = isset($_SESSION['edit-user-data']['user_role'])
+    ? (int)$_SESSION['edit-user-data']['user_role']
+    : (int)$user['is_admin'];
+
+  // nettoie une fois utilisé
+  unset($_SESSION['edit-user-data']);
+
 } else {
   // si ID non fournit dans l'URL
   redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', 'ID utilisateur non fournit 🤔');
@@ -63,15 +74,15 @@ if (isset($_GET['id'])) {
       <input type="hidden" name="csrf_token_edit_user" value="<?= $csrf_token ?>">
       <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
 
-      <input type="text" name="firstname" value="<?= e($user['firstname']) ?>" placeholder="Prénom">
-      <input type="text" name="lastname" value="<?= e($user['lastname']) ?>" placeholder="Nom">
-      <input type="text" name="username" value="<?= e($user['username']) ?>" placeholder="Pseudo">
+      <input type="text" name="firstname" value="<?= e($firstname ?: $user['firstname']) ?>" placeholder="Prénom">
+      <input type="text" name="lastname" value="<?= e($lastname ?: $user['lastname']) ?>" placeholder="Nom">
+      <input type="text" name="username" value="<?= e($username ?: $user['username']) ?>" placeholder="Pseudo">
 
       <div class="form__control">
         <label for="role">Rôle Utilisateur</label>
         <select id="role" name="user_role">
-          <option value="0" <?= $user['is_admin'] == 0 ? 'selected' : '' ?>>Auteur</option>
-          <option value="1" <?= $user['is_admin'] == 1 ? 'selected' : '' ?>>Admin</option>
+          <option value="0" <?= $selected_role == 0 ? 'selected' : '' ?>>Auteur</option>
+          <option value="1" <?= $selected_role == 1 ? 'selected' : '' ?>>Admin</option>
         </select>
       </div>
 

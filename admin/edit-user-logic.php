@@ -19,9 +19,8 @@ $username = sanitizeText($_POST['username'] ?? '');
 $is_admin = sanitizeInt($_POST['user_role'] ?? 0);
 
 // vérifier les champs requis
-if (!$id || !$firstname || !$lastname || !$username) {
-  redirectWithMessage(ROOT_URL . "admin/edit-user.php?id=$id", 'edit-user', 'Ces champs sont requis 😢');
-}
+$errors = [];
+if (!$id || !$firstname || !$lastname || !$username) $errors[] = 'Les champs "Prénom", "Nom", "Pseudo" sont requis 😢';
 
 // récupérer l'ancien avatar si existant
 $avatar_to_save = null;
@@ -36,15 +35,24 @@ $avatar_stmt->close();
 if (!empty($_FILES['avatar']['name'])) {
   // validation de l'image
   $imageError = validateImage($_FILES['avatar'], 1_000_000);
-  if ($imageError) {
-    redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', 'Avatar : ' . $imageError);
-  }
-  
-  $avatar_to_save = uploadAndReplace($_FILES['avatar'], $old_avatar, '../images/avatars/');
 
-  if (!$avatar_to_save) {
-    redirectWithMessage(ROOT_URL . 'admin/manage-users.php', 'edit-user', "Erreur lors de l'upload de l'avatar 😢");
+  if ($imageError) {
+    $errors[] = "Avatar: " . $imageError;
+  } else {
+    // seulement si image valide on upload
+    $avatar_to_save = uploadAndReplace($_FILES['avatar'], $old_avatar, '../images/avatars/');
+
+    if (!$avatar_to_save) {
+      $errors[] = "Erreur lors de l'upload de l'avatar 😢";
+    }
   }
+}
+
+if(!empty($errors)) {
+  $_SESSION['edit-user'] = implode('<br>', $errors);
+  $_SESSION['edit-user-data'] = $_POST;
+  header('location: ' . ROOT_URL . 'admin/edit-user.php?id=' . $id);
+  exit;
 }
 
 // update user avec ou sans mise à jour de l'avatar

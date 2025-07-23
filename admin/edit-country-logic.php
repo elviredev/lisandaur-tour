@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../config/init.php';
+require_once __DIR__ . '/../utils/admin-only.php';
 require_once __DIR__.'/../utils/redirect-msg.php';
 require_once __DIR__.'/../utils/validate-image.php';
 require_once __DIR__.'/../utils/upload-file.php';
@@ -18,9 +19,9 @@ $description = sanitizeText($_POST['description'] ?? '');
 $flag = sanitizeFile($_FILES['flag'] ?? []);
 
 // vérifier les champs requis
-if (!$id || !$title || !$description) {
-  redirectWithMessage(ROOT_URL . "admin/edit-country.php?id=$id", 'edit-country', 'Les champs "Nom du pays" et "Description" sont requis 😢');
-}
+$errors = [];
+if (!$id || !$title || !$description) $errors[] = 'Les champs "Nom du pays" et "Description" sont requis 😢';
+
 
 // récupérer l'ancien flag si existant
 $flag_to_save = null;
@@ -36,14 +37,22 @@ if (!empty($_FILES['flag']['name'])) {
   // validation de l'image
   $imageError = validateImage($_FILES['flag'], 1_000_000);
   if ($imageError) {
-    redirectWithMessage(ROOT_URL . 'admin/manage-countries.php', 'edit-country', 'Drapeau : ' . $imageError);
-  }
+    $errors[] = "Drapeau: " . $imageError;
+  } else {
+    // seulement si image valide on upload
+    $flag_to_save = uploadAndReplace($_FILES['flag'], $old_flag, '../images/flags/');
 
-  $flag_to_save = uploadAndReplace($_FILES['flag'], $old_flag, '../images/flags/');
-
-  if (!$flag_to_save) {
-    redirectWithMessage(ROOT_URL . 'admin/manage-countries.php', 'edit-country', "Erreur lors de l'upload du drapeau 😢");
+    if (!$flag_to_save) {
+      $errors[] = 'Impossible d\'enregistrer le drapeau 😢';
+    }
   }
+}
+
+if(!empty($errors)) {
+  $_SESSION['edit-country'] = implode('<br>', $errors);
+  $_SESSION['edit-country-data'] = $_POST;
+  header('location: ' . ROOT_URL . 'admin/edit-country.php?id=' . $id);
+  exit;
 }
 
 // update country avec ou sans mise à jour du flag

@@ -13,7 +13,7 @@ $csrf_token = generateCSRFToken('csrf_token_delete_post');
 // récupérer le user courant
 $current_user_id = (int) $_SESSION['user-id'];
 
-// Si l'utilisateur est admin, on récupère tous les posts
+// si l'utilisateur est admin, on récupère tous les posts
 if (isset($_SESSION['user_is_admin']) && $_SESSION['user_is_admin']) {
   $baseQuery = "SELECT posts.id, posts.title, countries.title AS country_title, users.username AS username
                 FROM posts
@@ -171,6 +171,7 @@ $total_pages = $pagination['total_pages'];
               <td><?= e($post['country_title']) ?></td>
               <td><?= e($post['username']) ?></td>
               <td><a href="<?= ROOT_URL ?>admin/edit-post.php?id=<?= e($post['id']) ?>&page=<?= e($page) ?>" class="btn sm edit">Editer</a></td>
+
               <td><a href="#" class="btn sm danger">Suppr</a></td>
             </tr>
           <?php endforeach; ?>
