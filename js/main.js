@@ -94,7 +94,7 @@ function initLoadMorePosts() {
     const token = loadMoreBtn.dataset.token || "";
 
     try {
-      const response = await fetch("/load-more-posts.html", {
+      const response = await fetch("/load-more-posts.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -104,7 +104,7 @@ function initLoadMorePosts() {
 
       if (response.status === 204) {
         loadMoreBtn.disabled = true;
-        loadMoreBtn.innerText = "Plus d’articles disponibles";
+        loadMoreBtn.innerText = "Pas d'autres articles";
         return;
       }
 

@@ -86,7 +86,7 @@ $current_user_id = $_SESSION['user-id'] ?? null;
 
 // si admin, on compte tous les posts sinon on compte les posts du user courant
 $where = $is_admin ? '' : "author_id = $current_user_id";
-$total_pages = getTotalPages($connection, 'posts', $where, 3);
+$total_pages = getTotalPages($connection, 'posts', $where, 4);
 
 // redirection logique
 $page = min($page, $total_pages);

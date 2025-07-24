@@ -30,7 +30,7 @@ if (isset($_SESSION['user_is_admin']) && $_SESSION['user_is_admin']) {
                 ORDER BY posts.id DESC";
 }
 
-$pagination = paginate($baseQuery, $connection, 3);
+$pagination = paginate($baseQuery, $connection, 4);
 $posts = $pagination['items'];
 $page = $pagination['page'];
 $total_pages = $pagination['total_pages'];

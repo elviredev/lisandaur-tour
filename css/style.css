@@ -531,10 +531,7 @@ img {
   margin-left: 1rem;
   padding: .5rem .8rem;
 }
-.year__button:hover {
-  background-color: #ffffff26;
-  color: var(--grey-300);
-}
+
 
 
 /* ======================= GENERAL POST ======================= */
@@ -586,7 +583,7 @@ img {
 .post__author-avatar {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 1rem;
+  border-radius: 50%;
   overflow: hidden;
 }
 
