@@ -1,8 +1,12 @@
 <?php
-// Exemple d’utilisation :
-// require 'partials/pagination.php';
-// $pagination = paginate('users', "WHERE NOT id=$current_admin_id", $connection);
-
+/**
+ * Fonction pour un usage général dans les vues
+ * Liste les éléments paginés, calcule le nb total de pages, page courante
+ * @param string $baseQuery
+ * @param mysqli $connection
+ * @param int $limit
+ * @return array
+ */
 function paginate(string $baseQuery, mysqli $connection, int $limit = 5): array {
   // Page courante (par défaut 1 si non précisée)
   $page = isset($_GET['page']) && filter_var($_GET['page'], FILTER_VALIDATE_INT) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;

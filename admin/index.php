@@ -172,7 +172,16 @@ $total_pages = $pagination['total_pages'];
               <td><?= e($post['username']) ?></td>
               <td><a href="<?= ROOT_URL ?>admin/edit-post.php?id=<?= e($post['id']) ?>&page=<?= e($page) ?>" class="btn sm edit">Editer</a></td>
 
-              <td><a href="#" class="btn sm danger">Suppr</a></td>
+              <td>
+                <form method="POST" action="<?= ROOT_URL ?>admin/delete-post.php" class="delete-post-form" style="display:inline-block;">
+                  <input type="hidden" name="id" value="<?= e($post['id']) ?>">
+                  <input type="hidden" name="csrf_token_delete_post" value="<?= $csrf_token ?>">
+                  <input type="hidden" name="title" value="<?= e($post['title']) ?>">
+                  <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
+
+                  <button type="submit" class="btn sm danger">Suppr</button>
+                </form>
+              </td>
             </tr>
           <?php endforeach; ?>
         </tbody>
@@ -187,7 +196,14 @@ $total_pages = $pagination['total_pages'];
           <div class="card-actions">
             <a href="<?= ROOT_URL ?>admin/edit-post.php?id=<?= e($post['id']) ?>&page=<?= e($page) ?>" class="btn sm edit">Editer</a>
 
-            <a href="#" class="btn sm danger">Suppr</a>
+            <form method="POST" action="<?= ROOT_URL ?>admin/delete-post.php" class="delete-post-form" style="display:inline-block;">
+              <input type="hidden" name="id" value="<?= e($post['id']) ?>">
+              <input type="hidden" name="csrf_token_delete_post" value="<?= $csrf_token ?>">
+              <input type="hidden" name="title" value="<?= e($post['title']) ?>">
+              <input type="hidden" name="page" value="<?= e($_GET['page'] ?? 1) ?>">
+
+              <button type="submit" class="btn sm danger">Suppr</button>
+            </form>
           </div>
         </div>
         <?php endforeach; ?>

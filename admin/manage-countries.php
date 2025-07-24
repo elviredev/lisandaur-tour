@@ -13,7 +13,7 @@ $csrf_token = generateCSRFToken('csrf_token_delete_country');
 
 // récupérer les pays
 $baseQuery = "SELECT * FROM countries ORDER BY title";
-$pagination = paginate($baseQuery, $connection, 3);
+$pagination = paginate($baseQuery, $connection);
 $countries = $pagination['items'];
 $page = $pagination['page'];
 $total_pages = $pagination['total_pages'];
@@ -115,7 +115,7 @@ $total_pages = $pagination['total_pages'];
             </a>
           </li>
           <li>
-            <a href="manage-countries.php">
+            <a href="manage-countries.php" class="active">
               <i class="uil uil-globe"></i>
               <h5>Gérer les pays</h5>
             </a>
