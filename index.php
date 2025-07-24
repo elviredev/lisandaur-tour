@@ -58,6 +58,10 @@ $total_posts = $count_result->fetch_assoc()['total'];
 $count_query->close();
 
 // fetch all countries
+$countries_query = $connection->prepare("SELECT * FROM countries");
+$countries_query->execute();
+$countries = $countries_query->get_result();
+$countries_query->close();
 
 ?>
 
@@ -164,38 +168,14 @@ $count_query->close();
 <!-- SECTION COUNTRY START -->
 <section class="country__buttons">
   <div class="container country__buttons-container">
-    <a href="country-posts.php" class="country country__button">
-      <span>Japon</span>
-      <img class="country__flag" src="images/japon.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Angleterre</span>
-      <img class="country__flag" src="images/royaume-uni.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Italie</span>
-      <img class="country__flag" src="images/italie.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Islande</span>
-      <img class="country__flag" src="images/islande.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Corée du sud</span>
-      <img class="country__flag" src="images/coree-du-sud.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Espagne</span>
-      <img class="country__flag" src="images/espagne.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Madeire</span>
-      <img class="country__flag" src="images/portugal.png" alt="flag">
-    </a>
-    <a href="country-posts.php" class="country country__button">
-      <span>Etats-Unis</span>
-      <img class="country__flag" src="images/etats-unis.png" alt="flag">
-    </a>
+    <?php foreach ($countries as $country): ?>
+      <?php if ($country['id'] !== UNCATEGORIZED_COUNTRY_ID): ?>
+        <a href="<?= ROOT_URL ?>country-posts.php?id=<?= e($country['id']) ?>" class="country country__button">
+          <span><?= e($country['title']) ?></span>
+          <img class="country__flag" src="<?= ROOT_URL ?>images/flags/<?= e($country['flag']) ?>" alt="flag">
+        </a>
+      <?php endif; ?>
+    <?php endforeach; ?>
   </div>
 </section>
 <!-- SECTION COUNTRY END -->
