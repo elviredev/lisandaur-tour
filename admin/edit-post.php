@@ -32,12 +32,15 @@ if(!$post) {
 }
 
 // Vérification des droits : auteur OU admin
-$current_user_id = $_SESSION['user_id'] ?? null;
+$current_user_id = $_SESSION['user-id'] ?? null;
 $is_admin = $_SESSION['user_is_admin'] ?? false;
+
 
 if ($post['author_id'] != $current_user_id && !$is_admin) {
   redirectWithMessage(ROOT_URL . 'admin/', 'edit-post', 'Accès non autorisé ❌');
 }
+
+
 
 // récupérer les pays
 $stmt = $connection->prepare("SELECT * FROM countries ORDER BY title");
@@ -103,6 +106,8 @@ unset($_SESSION['edit-post-data']);
       </select>
 
       <textarea rows="10" name="body" placeholder="Contenu de l'article"><?= e($body ?: $post['body']) ?></textarea>
+
+
 
       <?php if (isset($_SESSION['user_is_admin'])): ?>
         <div class="form__control inline">
@@ -175,6 +180,7 @@ unset($_SESSION['edit-post-data']);
   </div>
 </section>
 <!-- FORM END -->
+
 
 
 <?php

@@ -85,7 +85,7 @@ while($post = $result->fetch_assoc()):
         <span><?= e($post['country_title']) ?></span>
         <img class="country__flag" src="<?= ROOT_URL ?>images/flags/<?= e($post['country_flag']) ?>" alt="flag">
       </a>
-      <span class="year__button">2025</span>
+      <span class="year__button"><?= e($post['year']) ?></span>
       <h3 class="post__title">
         <a href="<?= ROOT_URL ?>post.php?id=<?= $post['id'] ?>"><?= e($post['title']) ?></a>
       </h3>
