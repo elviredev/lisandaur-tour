@@ -666,6 +666,13 @@ img {
   width: 100%;
 }
 
+.search__bar-container input:focus {
+  outline: none;
+  border: 1px solid var(--pink);
+  box-shadow: 0 0 8px rgba(213, 145, 254, 0.6);
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
 .search__bar-container input::placeholder {
   font-family: inherit;
   font-size: var(--fs-md);
@@ -895,6 +902,7 @@ select {
 
 /* center text of alert. eg. empty country-posts page */
 .alert__message.lg {
+  grid-column: 1 / -1;
   text-align: center;
 }
 

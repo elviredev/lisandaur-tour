@@ -7,7 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initAlertMessage?.()
   initDeleteModal?.()
   initRemoveImageButtons?.()
+  initResetInputSearch?.()
 })
+
+// Vider le form de recherche : exécuter même lors d'un retour arrière. "pageshow" est spécialement conçu pour détecter les chargements depuis le cache navigateur, comme le retour arrière.
+window.addEventListener('pageshow', initResetInputSearch)
 
 /* ---------- Header BG ---------- */
 function initHeaderScroll() {
@@ -172,6 +176,25 @@ function initRemoveImageButtons() {
       }
     });
   });
+}
+
+/* ---------- VIDER INPUT APRES UNE RECHERCHE ---------- */
+function initResetInputSearch() {
+  const input = document.querySelector('input[name="search"]');
+
+  // vider le champ s'il existe
+  if (input) {
+    input.value = '';
+    input.setAttribute('value', '');
+    setTimeout(() => input.focus(), 50);
+  }
+
+  // nettoyer l'URL
+  if (window.location.search.includes('search=')) {
+    const url = new URL(window.location);
+    url.searchParams.delete('search');
+    window.history.replaceState({}, '', url.pathname);
+  }
 }
 
 
