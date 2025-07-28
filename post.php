@@ -82,9 +82,11 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
       </div>
     <?php endif; ?>
-    <p>
+
+    <div class="post__body">
       <?= $post['body'] ?>
-    </p>
+    </div>
+
   </div>
 </section>
 <!-- SINGLE POST END -->

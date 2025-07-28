@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
   $author_id = $_SESSION['user-id'] ?? null;
   $title = sanitizeText($_POST['title'] ?? '');
   $year = sanitizeText($_POST['year'] ?? '');
-  $body = sanitizeText($_POST['body'] ?? '');
+  $body = trim($_POST['body'] ?? '');
   $country_id = sanitizeInt($_POST['country'] ?? 0);
   $is_featured = isset($_POST['is_featured']) ? 1 : 0;
 

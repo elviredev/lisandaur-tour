@@ -35,12 +35,9 @@ if(!$post) {
 $current_user_id = $_SESSION['user-id'] ?? null;
 $is_admin = $_SESSION['user_is_admin'] ?? false;
 
-
 if ($post['author_id'] != $current_user_id && !$is_admin) {
   redirectWithMessage(ROOT_URL . 'admin/', 'edit-post', 'Accès non autorisé ❌');
 }
-
-
 
 // récupérer les pays
 $stmt = $connection->prepare("SELECT * FROM countries ORDER BY title");
@@ -105,9 +102,55 @@ unset($_SESSION['edit-post-data']);
         ?>
       </select>
 
-      <textarea rows="10" name="body" placeholder="Contenu de l'article"><?= e($body ?: $post['body']) ?></textarea>
+      <!-- Toolbar start -->
+      <div>
+        <div id="toolbar">
+          <button type="button" onclick="execCmd('bold')"><b>B</b></button>
+          <button type="button" onclick="execCmd('italic')"><i>I</i></button>
+          <button type="button" onclick="execCmd('underline')"><u>U</u></button>
+          <button type="button" onclick="execCmd('formatBlock', '<h1>')">H1</button>
+          <button type="button" onclick="execCmd('formatBlock', '<h2>')">H2</button>
+          <button type="button" onclick="execCmd('insertUnorderedList')">
+            <i class=" uil-list-ui-alt"></i>
+          </button>
 
+          <button type="button" onclick="execCmd('createLink')">
+            <i class="uil-link-alt"></i>
+          </button>
 
+          <button type="button" onclick="execCmd('removeFormat')">
+            <i class="uil-trash-alt"></i>
+          </button>
+          <div class="toolbar__dropdown">
+            <button type="button" class="toolbar__dropdown-dropdown-toggle" title="Alignement">
+              <i class="uil-list-ul"></i>
+            </button>
+            <div class="toolbar__dropdown-dropdown-menu">
+              <button type="button" onclick="execCmd('justifyLeft')" title="Align left">
+                <i class="uil uil-align-left"></i>
+              </button>
+              <button type="button" onclick="execCmd('justifyCenter')" title="Align center">
+                <i class="uil uil-align-center"></i>
+              </button>
+              <button type="button" onclick="execCmd('justifyRight')" title="Align right">
+                <i class="uil uil-align-right"></i>
+              </button>
+              <button type="button" onclick="execCmd('justifyFull')" title="Justify">
+                <i class="uil uil-align-justify"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone éditable -->
+        <div id="editor" contenteditable="true" >
+          <?= $post['body'] ?>
+        </div>
+
+        <!-- Champ caché à envoyer -->
+        <textarea name="body" id="hiddenBody" style="display:none;"></textarea>
+      </div>
+      <!-- Toolbar end -->
 
       <?php if (isset($_SESSION['user_is_admin'])): ?>
         <div class="form__control inline">
@@ -181,7 +224,51 @@ unset($_SESSION['edit-post-data']);
 </section>
 <!-- FORM END -->
 
+<!-- Editor -->
+<script>
+  function execCmd(command, value = null) {
+    // Pour la création d'un lien dans l'editor
+    if (command === 'createLink') {
+      const selection = window.getSelection();
+      let existingUrl = '';
 
+      // 🔍 Vérifie si on est dans un lien existant
+      if (selection.rangeCount > 0) {
+        const parentEl = selection.anchorNode?.parentElement;
+        if (parentEl && parentEl.tagName === 'A') {
+          existingUrl = parentEl.getAttribute('href') || '';
+        }
+      }
+
+      // 📝 Demande une URL avec l'URL actuelle préremplie si présente
+      let url = prompt('Entrez l’URL :', existingUrl);
+
+      if (url) {
+        // Ajoute https:// si manquant
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://' + url;
+        }
+
+        document.execCommand(command, false, url);
+
+        // Applique target="_blank" et rel sur le lien nouvellement créé
+        if (selection.rangeCount > 0) {
+          const anchor = selection.anchorNode?.parentElement;
+          if (anchor && anchor.tagName === 'A') {
+            anchor.setAttribute('target', '_blank');
+            anchor.setAttribute('rel', 'noopener noreferrer');
+          }
+        }
+      }
+    } else {
+      document.execCommand(command, false, value);
+    }
+  }
+
+  document.querySelector('form').addEventListener('submit', function () {
+    document.getElementById('hiddenBody').value = document.getElementById('editor').innerHTML;
+  });
+</script>
 
 <?php
 include '../partials/footer.php'

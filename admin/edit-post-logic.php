@@ -19,7 +19,7 @@ if (!isset($_POST['submit'])) {
 // Récupération des champs
 $post_id = sanitizeInt($_POST['id'] ?? null);
 $title = sanitizeText($_POST['title'] ?? null);
-$body = sanitizeText($_POST['body'] ?? null);
+$body = trim($_POST['body'] ?? null);
 $country_id = sanitizeInt($_POST['country'] ?? null);
 $year = sanitizeText($_POST['year'] ?? null);
 $is_featured = isset($_POST['is_featured']) ? 1 : 0;

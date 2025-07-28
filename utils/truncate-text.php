@@ -8,11 +8,12 @@
  */
 function truncateText($text, int $limit = 300, string $end = '...'): string
 {
-  $text = strip_tags($text); // supprime tout le HTML
+  $text = strip_tags($text); // supprime les balises HTML
+  $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'); // décode &nbsp;, &amp;, etc.
   $text = trim($text);
 
   if(mb_strlen($text, 'UTF-8') <= $limit) {
-    return htmlspecialchars($text);
+    return htmlspecialchars($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
   }
 
   // tronquer à la limite
@@ -23,5 +24,6 @@ function truncateText($text, int $limit = 300, string $end = '...'): string
   if($last_space !== false) {
     $truncated = mb_substr($truncated, 0, $last_space, 'UTF-8');
   }
-  return htmlspecialchars($truncated . $end);
+  // réencode proprement à la fin, pour l'affichage HTML.
+  return htmlspecialchars($truncated . $end, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
