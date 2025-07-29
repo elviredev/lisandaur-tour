@@ -1,3 +1,12 @@
+<?php
+require_once __DIR__ . '/../config/init.php';
+require_once __DIR__ . '/../utils/sanitize.php';
+
+// récupérer les pays avec leur id
+$country_query = $connection->query("SELECT id, title FROM countries ORDER BY title LIMIT 6");
+$countries = $country_query->fetch_all(MYSQLI_ASSOC);
+?>
+
 <footer>
     <div class="footer__socials">
         <a href="https://youtube.com" target="_blank"><i class="uil uil-youtube"></i></a>
@@ -11,12 +20,15 @@
         <article>
             <h4>Pays visités</h4>
             <ul>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Japon</a></li>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Italie</a></li>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Espagne</a></li>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Corée du Sud</a></li>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Etats-Unis</a></li>
-                <li><a href="<?= ROOT_URL ?>country-posts.php">Islande</a></li>
+                <?php foreach ($countries as $country) : ?>
+                  <?php if ((int)$country['id'] !== (int)UNCATEGORIZED_COUNTRY_ID) : ?>
+                    <li>
+                      <a href="<?= ROOT_URL ?>country-posts.php?id=<?= $country['id'] ?>">
+                        <?= e($country['title']) ?>
+                      </a>
+                    </li>
+                  <?php endif; ?>
+                <?php endforeach; ?>
             </ul>
         </article>
         <article>
@@ -57,7 +69,7 @@
                 <li><a href="<?= ROOT_URL ?>blog.php">Blog</a></li>
                 <li><a href="<?= ROOT_URL ?>about.php">À propos</a></li>
                 <li><a href="<?= ROOT_URL ?>contact.php">Contact</a></li>
-                <li><a href="<?= ROOT_URL ?>dashboard.php">Gestion</a></li>
+                <li><a href="<?= ROOT_URL ?>admin/index.php">Gestion</a></li>
             </ul>
         </article>
     </div>

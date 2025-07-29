@@ -110,6 +110,7 @@ unset($_SESSION['edit-post-data']);
           <button type="button" onclick="execCmd('underline')"><u>U</u></button>
           <button type="button" onclick="execCmd('formatBlock', '<h1>')">H1</button>
           <button type="button" onclick="execCmd('formatBlock', '<h2>')">H2</button>
+          <button type="button" onclick="execCmd('formatBlock', '<p>')">P</button>
           <button type="button" onclick="execCmd('insertUnorderedList')">
             <i class=" uil-list-ui-alt"></i>
           </button>

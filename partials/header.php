@@ -80,7 +80,6 @@ if (isset($_SESSION['user-id'])) {
             <img src="<?= ROOT_URL . 'images/avatars/' . $avatar['avatar'] ?>" alt="avatar">
           </div>
         </li>
-        <div style='background: orangered; padding: 10px;'>Connecté avec l'utilisateur ID : <?= $_SESSION['user-id'] ?> </div>
       <?php else: ?>
         <li><a href="<?= ROOT_URL ?>signin.php" class="signin">Se connecter</a></li>
       <?php endif; ?>
