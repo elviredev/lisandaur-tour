@@ -1,11 +1,18 @@
 <?php
 require_once __DIR__ . '/config/init.php';
+require_once __DIR__ . '/utils/redirect-msg.php';
+require_once __DIR__ . '/utils/sanitize.php';
+
+// Protection CSRF pour s'assurer que le form est bien soumis depuis mon site
+if (!isset($_POST['csrf_token_signin']) || $_POST['csrf_token_signin'] !== $_SESSION['csrf_token_signin']) {
+  redirectWithMessage(ROOT_URL . 'signin.php', 'signin', 'CSRF token invalide 🔐');
+}
 
 // get signin form data when signin button was clicked
 if (isset($_POST["submit"])) {
   // sanityze inputs
-  $username_email = filter_var($_POST['username_email'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $password = filter_var($_POST['password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $username_email = sanitizeText($_POST["username_email"] ?? '');
+  $password = sanitizeText($_POST["password"] ?? '');
 
   // stocker les erreurs
   $errors = [];
@@ -38,6 +45,9 @@ if (isset($_POST["submit"])) {
         }
 
         $query->close();
+
+        // régénérer le token après chaque soumission réussie pour éviter la réutilisation (optionnel)
+        unset($_SESSION['csrf_token_signin']);
 
         // log user in
         header('location: ' . ROOT_URL . 'admin/');

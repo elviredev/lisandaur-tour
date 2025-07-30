@@ -1,5 +1,10 @@
 <?php
 require_once __DIR__ . '/config/init.php';
+require_once __DIR__ . '/utils/sanitize.php';
+require_once __DIR__ . '/utils/token.php';
+
+// générer un token CSRF au chargement de la page
+$csrf_token = generateCSRFToken('csrf_token_signup');
 
 // récupérer les données du form en cas d'erreur d'enregistrement
 $firstname = $_SESSION['signup-data']['firstname'] ?? '';
@@ -50,10 +55,12 @@ unset($_SESSION['signup-data']);
     <?php endif; ?>
 
     <form action="<?= ROOT_URL ?>signup-logic.php" enctype="multipart/form-data" method="POST">
-      <input type="text" name="firstname" value="<?= htmlspecialchars($firstname) ?>" placeholder="Votre prénom">
-      <input type="text" name="lastname" value="<?= htmlspecialchars($lastname) ?>" placeholder="Votre nom">
-      <input type="text" name="username" value="<?= htmlspecialchars($username) ?>" placeholder="Votre pseudo">
-      <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" placeholder="Votre email">
+      <input type="hidden" name="csrf_token_signup" value="<?= $csrf_token ?>">
+
+      <input type="text" name="firstname" value="<?= e($firstname) ?>" placeholder="Votre prénom">
+      <input type="text" name="lastname" value="<?= e($lastname) ?>" placeholder="Votre nom">
+      <input type="text" name="username" value="<?= e($username) ?>" placeholder="Votre pseudo">
+      <input type="email" name="email" value="<?= e($email) ?>" placeholder="Votre email">
       <input type="password" name="create_password" placeholder="Créer votre mot de passe">
       <input type="password" name="confirm_password" placeholder="Confirmer votre mot de passe">
       <div class="form__control">
@@ -62,7 +69,7 @@ unset($_SESSION['signup-data']);
       </div>
 
       <button type="submit" name="submit" class="btn-form">S'inscrire</button>
-      <small>Vous avez déja un compte? <a href="signin.php">Se connecter</a></small>
+      <small>Vous avez déja un compte? <a href="<?= ROOT_URL ?>signin.php">Se connecter</a></small>
     </form>
   </div>
 </section>

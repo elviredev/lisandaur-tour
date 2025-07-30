@@ -1,18 +1,25 @@
 <?php
 require_once __DIR__ . '/config/init.php';
+require_once __DIR__ . '/utils/redirect-msg.php';
+require_once __DIR__ . '/utils/sanitize.php';
 require_once __DIR__.'/utils/validate-image.php';
 require_once __DIR__.'/utils/upload-file.php';
+
+// Protection CSRF pour s'assurer que le form est bien soumis depuis mon site
+if (!isset($_POST['csrf_token_signup']) || $_POST['csrf_token_signup'] !== $_SESSION['csrf_token_signup']) {
+  redirectWithMessage(ROOT_URL . 'signup.php', 'signup', 'CSRF token invalide 🔐');
+}
 
 // get signup form data when signup button was clicked
 if (isset($_POST["submit"])) {
   // sanityze inputs
-  $firstname = filter_var($_POST['firstname'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $lastname = filter_var($_POST['lastname'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $username = filter_var($_POST['username'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-  $create_password = filter_var($_POST['create_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $confirm_password = filter_var($_POST['confirm_password'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $avatar = $_FILES['avatar'];
+  $firstname = sanitizeText($_POST["firstname"] ?? '');
+  $lastname = sanitizeText($_POST["lastname"] ?? '');
+  $username = sanitizeText($_POST["username"] ?? '');
+  $email = sanitizeEmail($_POST["email"] ?? '');
+  $create_password = sanitizeText($_POST["create_password"] ?? '');
+  $confirm_password = sanitizeText($_POST["confirm_password"] ?? '');
+  $avatar = sanitizeFile($_FILES["avatar"] ?? []);
 
   // stocker les erreurs
   $errors = [];
@@ -62,6 +69,8 @@ if (isset($_POST["submit"])) {
         exit;
       }
     }
+    // régénérer le token après chaque soumission réussie pour éviter la réutilisation (optionnel)
+    unset($_SESSION['csrf_token_signup']);
 
     $query->close();
   } else {

@@ -1,5 +1,10 @@
 <?php
 require_once __DIR__ . '/config/init.php';
+require_once __DIR__ . '/utils/sanitize.php';
+require_once __DIR__ . '/utils/token.php';
+
+// générer un token CSRF au chargement de la page
+$csrf_token = generateCSRFToken('csrf_token_signin');
 
 // récupérer les données du form en cas d'erreur d'enregistrement
 $username_email = $_SESSION['signin-data']['username_email'] ?? '';
@@ -53,11 +58,13 @@ unset($_SESSION['signin-data']);
     <?php endif; ?>
 
     <form action="<?= ROOT_URL ?>signin-logic.php" method="POST">
-      <input type="text" name="username_email" value="<?= htmlspecialchars($username_email) ?>" placeholder="Votre email ou pseudo">
+      <input type="hidden" name="csrf_token_signin" value="<?= $csrf_token ?>">
+
+      <input type="text" name="username_email" value="<?= e($username_email) ?>" placeholder="Votre email ou pseudo">
       <input type="password" name="password" placeholder="Votre mot de passe">
 
       <button type="submit" name="submit" class="btn-form">Se connecter</button>
-      <small>Vous n'avez pas encore de compte? <a href="signup.php">S'inscrire</a></small>
+      <small>Vous n'avez pas encore de compte? <a href="<?= ROOT_URL ?>signup.php">S'inscrire</a></small>
     </form>
   </div>
 </section>

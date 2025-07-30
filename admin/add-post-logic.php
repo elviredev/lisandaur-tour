@@ -82,7 +82,7 @@ if (isset($_POST['submit'])) {
       }
     }
     // pour invalider le token après usage (optionnel)
-    unset($_SESSION['csrf_token_add_country']);
+    unset($_SESSION['csrf_token_add_post']);
   } else {
     // stocker les erreurs dans la session
     $_SESSION['add-post'] = implode("<br>", $errors);
