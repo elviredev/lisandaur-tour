@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Permet une redirection correcte même après suppression du dernier post d'une page
+ * @desc Permet une redirection correcte même après suppression du dernier post d'une page
  * @param mysqli $connection
  * @param string $table
  * @param string $where

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @desc Télécharger un fichier et le stocker dans un dossier
+ * @param $file
+ * @param $folder
+ * @return string|null
+ */
 function uploadFile($file, $folder): ?string
 {
   // créer le dossier s'il n'existe pas

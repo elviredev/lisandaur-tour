@@ -1,5 +1,11 @@
 <?php
-// télécharger une nouvelle image et remplacer l'ancienne image
+/**
+ * @desc télécharger une nouvelle image et remplacer l'ancienne image
+ * @param $file
+ * @param $oldFilename
+ * @param $folder
+ * @return string|null
+ */
 function uploadAndReplace($file, $oldFilename, $folder): ?string {
   if ($file && $file['name']) {
     $extension = pathinfo($file['name'], PATHINFO_EXTENSION);

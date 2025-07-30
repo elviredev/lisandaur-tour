@@ -1,6 +1,11 @@
 <?php
-// valider les images
-function validateImage($file, $max_size = 2_000_000): ?string {
+/**
+ * @desc Valider les images
+ * @param $file
+ * @param int $max_size
+ * @return string|null
+ */
+function validateImage($file, int $max_size = 2_000_000): ?string {
   $allowed_extensions = ["png", "jpg", "jpeg", "svg", "webp"];
   $extension = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
 

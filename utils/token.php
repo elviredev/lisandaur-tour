@@ -1,4 +1,9 @@
 <?php
+/**
+ * @desc Générer un token
+ * @param string $key
+ * @return string
+ */
 function generateCSRFToken(string $key): string {
   if (!isset($_SESSION[$key])) {
     try {

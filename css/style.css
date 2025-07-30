@@ -569,8 +569,6 @@ img {
   padding: .5rem .8rem;
 }
 
-
-
 /* ======================= GENERAL POST ======================= */
 .post {
   border-radius: 1rem;
@@ -660,14 +658,6 @@ img {
 .country__buttons a {
   place-items: center;
 }
-
-/* ======================= EMPTY PAGES ======================= */
-/*.empty-page {*/
-/*  height: 70vh;*/
-/*  display: grid;*/
-/*  place-items: center;*/
-/*}*/
-
 
 /* ======================= CONTACT PAGE ======================= */
 .contact {
@@ -1603,18 +1593,6 @@ footer ul a:hover {
   .form__section-add-user {
     margin: 3rem 0;
   }
-
-  /*.form__section-mb {*/
-  /*  margin-bottom: 20rem;*/
-  /*}*/
-
-  /*.form__section-edit-post {*/
-  /*  margin-bottom: 25rem;*/
-  /*}*/
-
-  /*.form__section .container {*/
-  /*  width: var(--container-width-md);*/
-  /*}*/
 
   .form__section {
     padding: 2rem 1rem;
